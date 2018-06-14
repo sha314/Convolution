@@ -7,6 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 
 using namespace std;
@@ -80,12 +81,30 @@ read_header_json(std::string filename, char comment)
         if(line[0] == comment) {
             continue;
         }else{
-            cout << "Header found: " << endl;
+            cout << "Header -> ";
+            cout << line << endl;
             break;
         }
     }
 
+    // removing all spaces
+    line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
 
+    size_t a = line.find('{')+1;
+    size_t b = line.find('}')-1;
+//    cout << a << " to " << b << endl;
+    string contents = line.substr(a, b);
+//    cout << contents << endl;
+    vector<string> pairs = explode(contents, ',');
+    for(string &s : pairs){
+        vector<string> part = explode(s, ':');
+
+        string key_tmp = explode(part[0], '\"')[0];
+        unsigned value_tmp = atoi(part[1].c_str());
+
+        header_info[key_tmp] = value_tmp;
+
+    }
 
 
     return header_info;

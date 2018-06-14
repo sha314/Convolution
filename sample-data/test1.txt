@@ -1,0 +1,4 @@
+{"length":100,"ensemble_size":22}
+# this file only contains a header with no spaces
+# the following function can parse this header
+# std::map<std::string, unsigned> read_header_json(std::string filename, char comment)

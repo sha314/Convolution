@@ -211,13 +211,30 @@ void run_program_multi(){
 
     // run program from here
     // read convolution data from file
-    map<string, unsigned> header = read_header(filename);
+    cout << "Enter header type (0 for raw and 1 for JSON) : ";
+    int header_type{-1};
+    cin >> header_type;
+    map<string, unsigned> header;
+    vector<double> independent_data ;
+    vector<vector<double>> data ;
+
+    if(header_type == 0) {
+        header = read_header(filename);
+        independent_data = loadtxt(filename, ic, header["data_line"]-1);
+        data = loadtxt(filename, usecols, header["data_line"]-1);
+    }
+    else if(header_type == 1){
+        header = read_header_json(filename);
+        cout << "Every line except header and data should be commented : line " << __LINE__ << endl;
+        independent_data = loadtxt(filename, ic, 1);
+        data = loadtxt(filename, usecols, 1);
+    }else{
+        cout << "Invalid header type" << endl;
+    }
     cout << "Header info" << endl;
     for(auto i: header){
         cout << i.first << "=>" << i.second << endl;
     }
-    vector<double> independent_data = loadtxt(filename, ic, header["data_line"]-1);
-    vector<vector<double>> data = loadtxt(filename, usecols, header["data_line"]-1);
 
 
 //    print_vector(independent_data);
@@ -367,11 +384,6 @@ int main(int argc, char* argv[]) {
 
 
 //    print_vector(binomial_distribution_v1(10, 3, 0.5));
-
-//    map<string, unsigned> header = read_header("sq_lattice_site_percolation_100__combined_calculated.txt");
-//    for(auto i: header){
-//        cout << i.first << "=>" << i.second << endl;
-//    }
 
     cout << "Program finished " << endl;
     cout << "Time elapsed " << (clock() - t) / (double(CLOCKS_PER_SEC) * 60) << " minutes" << endl;
