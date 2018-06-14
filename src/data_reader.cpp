@@ -225,4 +225,64 @@ vector<vector<double>> loadtxt(string filename, const vector<unsigned>& usecols,
 
 
 
+/**
+ * Get a header for output file in raw format
+ * @param icolumn_name
+ * @param usecols_names
+ * @param header
+ * @return
+ */
+string
+output_header_raw(
+        const string& icolumn_name,
+        const vector<string>& usecols_names,
+        const map<string, unsigned>& header
+){
+    ostringstream oss;
+
+    oss << '#' << icolumn_name;
+    for(size_t i{0}; i != usecols_names.size(); ++i){
+        oss << "\t<" + usecols_names[i] + ">";
+        oss << "\t<" + usecols_names[i] + " convolved>";
+    }
+
+    oss << "#Convolved data" << endl;
+    oss << "BEGIN_HEADER" << endl;
+    oss << "ensemble_size\t" << header["ensemble_size"] << endl;
+    oss << "length\t" << header["length"] << endl;
+    oss << "data_line\t" << 8 << endl;
+    oss << "END_HEADER" << endl;
+    return oss.str();
+}
+
+/**
+ * Get a header for output file in JSON format
+ * @param icolumn_name
+ * @param usecols_names
+ * @param header
+ * @return
+ */
+string output_header_json(
+        const string& icolumn_name,
+        const vector<string>& usecols_names,
+        const map<string, unsigned>& header
+){
+    ostringstream oss;
+    oss << '{';
+    for(auto x: header){
+        oss << "\"" << x.first << "\"" << ':' << x.second << ',';
+    }
+    oss << '}';
+
+    oss << "#Convolved data" << endl;
+
+    oss << icolumn_name;
+    for(size_t i{0}; i != usecols_names.size(); ++i){
+        oss << "\t<" + usecols_names[i] + ">";
+        oss << "\t<" + usecols_names[i] + " convolved>";
+    }
+
+    return oss.str();
+}
+
 

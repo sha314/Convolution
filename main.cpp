@@ -236,7 +236,6 @@ void run_program_multi(){
         cout << i.first << "=>" << i.second << endl;
     }
 
-
 //    print_vector(independent_data);
 //    for(auto v : data) {
 //        print_vector(v);
@@ -250,21 +249,13 @@ void run_program_multi(){
     outfilename += "_convolved.txt";
     ofstream fout(outfilename);
     // with their names and appropriate header
-    string new_header_info = "#";
 
-    new_header_info += icolumn_name;
-    for(size_t i{0}; i != usecols_names.size(); ++i){
-        new_header_info += "\t<" + usecols_names[i] + ">";
-        new_header_info += "\t<" + usecols_names[i] + " convolved>";
+    if(header_type == 0) {
+        fout << output_header_raw(icolumn_name, usecols_names, header) << endl;
     }
-
-    fout << new_header_info << endl;
-    fout << "#Convolved data" << endl;
-    fout << "BEGIN_HEADER" << endl;
-    fout << "ensemble_size\t" << header["ensemble_size"] << endl;
-    fout << "length\t" << header["length"] << endl;
-    fout << "data_line\t" << 8 << endl;
-    fout << "END_HEADER" << endl;
+    else if(header_type == 1) {
+        fout << output_header_json(icolumn_name, usecols_names, header) << endl;
+    }
     for(size_t i{}; i != independent_data.size(); ++i){
         fout << independent_data[i];
         for(size_t j{}; j != data[i].size(); ++j){
