@@ -31,7 +31,7 @@ std::string output_header_json(
 std::string output_header_raw(
         const std::string& icolumn_name,
         const std::vector<std::string>& usecols_names,
-        const std::map<std::string, unsigned>& header
+        std::map<std::string, unsigned>& header
 );
 
 #endif //CONVOLUTION_DATA_READER_H

@@ -236,7 +236,7 @@ string
 output_header_raw(
         const string& icolumn_name,
         const vector<string>& usecols_names,
-        const map<string, unsigned>& header
+        map<string, unsigned>& header
 ){
     ostringstream oss;
 
@@ -272,11 +272,11 @@ string output_header_json(
     for(auto x: header){
         oss << "\"" << x.first << "\"" << ':' << x.second << ',';
     }
-    oss << '}';
+    oss << '}' << endl;
 
     oss << "#Convolved data" << endl;
 
-    oss << icolumn_name;
+    oss << '#' << icolumn_name;
     for(size_t i{0}; i != usecols_names.size(); ++i){
         oss << "\t<" + usecols_names[i] + ">";
         oss << "\t<" + usecols_names[i] + " convolved>";
