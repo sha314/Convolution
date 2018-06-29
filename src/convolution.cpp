@@ -176,7 +176,7 @@ vector<vector<double>> convolve_multi_v1(const vector<vector<double>>& data) {
     for(size_t i{}; i != size; ++i) {
         if(i % len == 0){
 //          cout << "Running for row " << i << endl;
-//            cout << "\33[2K"; // erase the current line
+            cout << "\33[2K"; // erase the current line
             cout << '\r'; // return the cursor to the start of the line
             cout << "at " << 100 * i / double(size) << "%";
             std::fflush(stdout);

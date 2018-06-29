@@ -244,6 +244,7 @@ void run_program_multi(){
 //    cout << "len(data) " << data.size() << endl;
     // perform convolution
     vector<vector<double>> convolved_data = convolve_multi_v1(data);
+    cout << endl;
 
     // write independent column, original columns, convolved columns
     string outfilename = filename.substr(0, filename.find("_2018"));
