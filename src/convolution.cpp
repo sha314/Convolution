@@ -174,7 +174,8 @@ vector<vector<double>> convolve_multi_v1(const vector<vector<double>>& data) {
     size_t len = size / 100;
     for(size_t i{}; i != size; ++i) {
         if(i % len == 0){
-            cout << "Running for row " << i << endl;
+//            cout << "Running for row " << i << endl;
+            cout << "at " << i/double(size) << "%" << endl;
         }
 
         probability = (i + 1) / double(size);
