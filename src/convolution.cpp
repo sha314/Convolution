@@ -171,11 +171,16 @@ vector<vector<double>> convolve_multi_v1(const vector<vector<double>>& data) {
     vector<vector<double>> out_data(data.size());
     vector<double> binomial;
     double probability;
-    size_t len = size / 100;
+    size_t len = size / 1000;
+
     for(size_t i{}; i != size; ++i) {
         if(i % len == 0){
-//            cout << "Running for row " << i << endl;
-            cout << "at " << i/double(size) << "%" << endl;
+//          cout << "Running for row " << i << endl;
+//            cout << "\33[2K"; // erase the current line
+            cout << '\r'; // return the cursor to the start of the line
+            cout << "at " << 100 * i / double(size) << "%";
+            std::fflush(stdout);
+//            cout << endl;
         }
 
         probability = (i + 1) / double(size);
