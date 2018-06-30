@@ -268,9 +268,15 @@ string output_header_json(
         const map<string, unsigned>& header
 ){
     ostringstream oss;
+    size_t max = header.size() - 1;
+    int i{};
     oss << '{';
     for(auto x: header){
-        oss << "\"" << x.first << "\"" << ':' << x.second << ',';
+        oss << "\"" << x.first << "\"" << ':' << x.second ;
+        if (i < max){
+            oss<< ',';
+        }
+        ++i;
     }
     oss << '}' << endl;
 
