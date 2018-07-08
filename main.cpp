@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <chrono>
 
 #include "src/binomial.h"
 #include "src/convolution.h"
@@ -243,7 +244,9 @@ void run_program_multi(){
 //    }
 //    cout << "len(data) " << data.size() << endl;
     // perform convolution
-    vector<vector<double>> convolved_data = convolve_multi_v1(data);
+//    vector<vector<double>> convolved_data = convolve_multi_v1(data); // single thread
+//    vector<vector<double>> convolved_data = convolve_multi_threaded_v1(data); //multi thread
+    vector<vector<double>> convolved_data = convolve_multi_threaded_v2(data); //multi thread
     cout << endl;
 
     // write independent column, original columns, convolved columns
@@ -367,6 +370,7 @@ void time_test(){
 int main(int argc, char* argv[]) {
     cout << "Convolution on big data" << endl;
     clock_t t = clock();
+    auto t0 = std::chrono::system_clock::now();
 
 //    time_test();
 //    test_run_program();
@@ -378,8 +382,12 @@ int main(int argc, char* argv[]) {
 
 //    print_vector(binomial_distribution_v1(10, 3, 0.5));
 
-    cout << "Program finished " << endl;
-    cout << "Time elapsed " << (clock() - t) / (double(CLOCKS_PER_SEC) * 60) << " minutes" << endl;
+    auto t1 = std::chrono::system_clock::now();
+
+    std::chrono::duration<double> elapsed_seconds = t1-t0;
+    std::time_t end_time = std::chrono::system_clock::to_time_t(t1);
+    cout << "Program finished at " << end_time << endl;
+    cout << "Time elapsed " << elapsed_seconds.count()/60 << " minutes" << endl;
     return 0;
 }
 
