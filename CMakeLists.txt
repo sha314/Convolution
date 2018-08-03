@@ -4,6 +4,8 @@ project(Convolution)
 
 set(CMAKE_CXX_STANDARD 11)
 
+SET(CMAKE_CXX_FLAGS  "-pthread -fopenmp")
+
 set(SOURCE_FILES
         main.cpp
         src/binomial.cpp
