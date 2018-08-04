@@ -1,0 +1,28 @@
+# 2018.08.03  21:34
+##run_omp
+# computaion was performed on core i3 with 4 threads
+# using OpenMP
+# performed on a single column
+### Time taken by methods of Convolution class
+### T(n) is the required time in seconds for n data
+# in the log-log plot
+# slope=2.5041136292313255, intercept=-23.65262402846476
+# T(n) = (5.343131981713083e-11) * n ^(2.5041136292313255)
+# from this data
+# T(200,000) = 0.279 hrs
+# T(500,000) = 2.765 hrs
+# T(800,000) = 8.9707 hrs
+# T(1,000,000) = 15.685 hrs
+# 
+#n       T(n)
+10000   0.50182
+20000   3.45014
+30000   9.01214
+40000   18.7072
+50000   33.0408
+70000   71.4543
+90000   129.248
+100000  165.483
+120000	253.442
+160000	637.04
+500000	7419.18

@@ -17,11 +17,11 @@ using namespace std;
 /**
  * Read Header of data files
  * @param filename
- * @param delemiter
+ * @param delimiter
  * @param comment
  * @return
  */
-map<string, unsigned> read_header(string filename, char delemiter, char comment){
+map<string, unsigned> read_header(string filename, char delimiter, char comment){
     ifstream fin(filename);
 
     map<string, unsigned> header_info;
@@ -62,7 +62,7 @@ map<string, unsigned> read_header(string filename, char delemiter, char comment)
  *  Only First line of the file should contain the header information
  *  // todo start scanning from '{' and end at '}'
  * @param filename
- * @param delemiter
+ * @param delimiter
  * @param comment
  * @return
  */
@@ -141,15 +141,16 @@ std::vector<std::string> explode(const std::string& str, const char& ch) {
 }
 
 /**
- *
- * @param filename
- * @param usecols
- * @param skiprows : number of rows to be skipped (commented or uncommented)
- * @param delemiter
- * @return
+ * Reads data from files
+ * @param filename  : name of the file
+ * @param usecols   : column to read
+ * @param skiprows  : number of rows to be skipped (commented or uncommented)
+ * @param delimiter : character used as delemeter in the file
+ * @param comment   : character used as comment in the file
+ * @return : data of the column
  */
 vector<double> loadtxt(string filename, unsigned usecol,
-                               unsigned skiprows, char delemiter, char comment){
+                               unsigned skiprows, char delimiter, char comment){
     vector<double> data;
     ifstream fin(filename);
 
@@ -180,16 +181,18 @@ vector<double> loadtxt(string filename, unsigned usecol,
 }
 
 
+
 /**
- *
- * @param filename
- * @param usecols
- * @param skiprows : number of rows to be skipped (commented or uncommented). starts from 0
- * @param delemiter
- * @return
+ * Reads columns of data from files
+ * @param filename  : name of the file
+ * @param usecols   : columns to read
+ * @param skiprows  : number of rows to be skipped (commented or uncommented)
+ * @param delimiter : character used as delemeter in the file
+ * @param comment   : character used as comment in the file
+ * @return : data of the columns
  */
 vector<vector<double>> loadtxt(string filename, const vector<unsigned>& usecols,
-                                         unsigned skiprows, char delemiter, char comment){
+                                         unsigned skiprows, char delimiter, char comment){
     vector<vector<double>> data;
     ifstream fin(filename);
 

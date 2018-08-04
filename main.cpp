@@ -460,28 +460,32 @@ void test_in_main(int argc, char **argv){
     string filename = "sq_lattice_site_percolation_periodic_200-calculated-.txt";
     vector<double> independent_data = loadtxt(filename, 0, 1);
 
-    vector<double> data = loadtxt(filename, 1, 1);
-
+//    vector<double> data = loadtxt(filename, 1, 1);
+    size_t n = atoi(argv[1]);
+    vector<double> data(n);
+    for(size_t i{}; i != data.size(); ++i){
+        data[i] = rand() / double(RAND_MAX);
+    }
     cout << "data.size() " << data.size() << endl;
 
 
     Convolution conv;
-    vector<double> out_data = conv.run_omp(data);
+    vector<double> out_data = conv.run_pthread(data);
     conv.timeElapsed();
 
-    string outfilename = filename + "_convolved.txt";
-    ofstream fout(outfilename);
-    // with their names and appropriate header
-
-
-    for(size_t i{}; i != independent_data.size(); ++i){
-        fout << independent_data[i] ;
-        fout << '\t' << data[i];
-        fout << '\t' << out_data[i];
-
-        fout << endl;
-    }
-    fout.close();
+//    string outfilename = filename + "_convolved.txt";
+//    ofstream fout(outfilename);
+//    // with their names and appropriate header
+//
+//
+//    for(size_t i{}; i != independent_data.size(); ++i){
+//        fout << independent_data[i] ;
+//        fout << '\t' << data[i];
+//        fout << '\t' << out_data[i];
+//
+//        fout << endl;
+//    }
+//    fout.close();
 }
 
 void test_multi_in_main(int argc, char **argv){
@@ -505,11 +509,12 @@ void test_multi_in_main(int argc, char **argv){
             break;
         }
     }
+
     Convolution conv;
-    vector<vector<double>> out_data = conv.run_multi_omp(data);
+    vector<vector<double>> out_data = conv.run_multi_pthread(data);
     conv.timeElapsed();
 
-    string outfilename = filename + "_convolved.txt";
+    string outfilename = filename + "_convoluted.txt";
     ofstream fout(outfilename);
     // with their names and appropriate header
 
