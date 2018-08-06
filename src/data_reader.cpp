@@ -95,11 +95,11 @@ read_header_json(std::string filename, char comment)
 //    cout << a << " to " << b << endl;
     string contents = line.substr(a, b);
 //    cout << contents << endl;
-    vector<string> pairs = explode(contents, ',');
+    vector<string> pairs = explode_to_string(contents, ',');
     for(string &s : pairs){
-        vector<string> part = explode(s, ':');
+        vector<string> part = explode_to_string(s, ':');
 
-        string key_tmp = explode(part[0], '\"')[0];
+        string key_tmp = explode_to_string(part[0], '\"')[0];
         unsigned value_tmp = atoi(part[1].c_str());
 
         header_info[key_tmp] = value_tmp;
@@ -116,7 +116,7 @@ read_header_json(std::string filename, char comment)
  * @param ch
  * @return
  */
-std::vector<std::string> explode(const std::string& str, const char& ch) {
+std::vector<std::string> explode_to_string(const std::string &str, const char &ch) {
     std::string next;
     vector<std::string> result;
 
@@ -140,6 +140,29 @@ std::vector<std::string> explode(const std::string& str, const char& ch) {
     return result;
 }
 
+
+
+/**
+ * explode a string to vector of string
+ * @param s
+ * @param c
+ * @return
+ */
+vector<int> explode_to_int(const string &s, const char &c)
+{
+    string buff{""};
+    vector<int> v;
+
+    for(auto n:s)
+    {
+        if(n != c) buff+=n; else
+        if(n == c && buff != "") { v.push_back(atoi(buff.c_str())); buff = ""; }
+    }
+    if(buff != "") v.push_back(atoi(buff.c_str()));
+
+    return v;
+}
+
 /**
  * Reads data from files
  * @param filename  : name of the file
@@ -149,8 +172,8 @@ std::vector<std::string> explode(const std::string& str, const char& ch) {
  * @param comment   : character used as comment in the file
  * @return : data of the column
  */
-vector<double> loadtxt(string filename, unsigned usecol,
-                               unsigned skiprows, char delimiter, char comment){
+vector<double> loadtxt(string filename, int usecol,
+                       int skiprows, char delimiter, char comment){
     vector<double> data;
     ifstream fin(filename);
 
@@ -191,8 +214,8 @@ vector<double> loadtxt(string filename, unsigned usecol,
  * @param comment   : character used as comment in the file
  * @return : data of the columns
  */
-vector<vector<double>> loadtxt(string filename, const vector<unsigned>& usecols,
-                                         unsigned skiprows, char delimiter, char comment){
+vector<vector<double>> loadtxt(string filename, const vector<int>& usecols,
+                               int skiprows, char delimiter, char comment){
     vector<vector<double>> data;
     ifstream fin(filename);
 
