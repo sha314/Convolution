@@ -49,30 +49,41 @@ void version(){
 
 }
 void help(){
-    string hlp = R"***(Usage: convolution [-f <STRING>] [-a <INT>,<INT>,...[:[<STRING>,<STRING>,...]]] [-b <INT>,<INT>,...[:[<STRING>,<STRING>,...]]] [-h <INT>] [-t <INT>]
+    string hlp = R"***(Usage:
+convolution [-f <STRING>] [-a <INT>,<INT>,...[:[<STRING>,<STRING>,...]]] [-b <INT>,<INT>,...[:[<STRING>,<STRING>,...]]] [-h] [-t <INT>] [-i <STRING>]
+
 perform convolution based on provided options.
 
 Options                      Description
   -a,                        columns that we want in the output file without performing convolution.
+                             No default value.
   -b,                        columns that we want in the output file with performing convolution.
-  -c,                        If provided the header will be written without modification to the output file.
-                             Header is the first line of the input file.
-                             If <INT> is specified then that line will be considered as header.
-  -f                         name of the input file that we want to convolute.
+                             No default value.
+  -c,                        If provided the header and comment from the input file will be written
+                             without modification to the output file. Header is the first line of the
+                             input file.
+  -d                         Delimeter to use. Default value is ' '.
+  -f                         name of the input file that we want to convolute. No default value.
+  -i                         Info to write as comment in the output file
   -o                         name of the output file. If not provided the string '_convoluted.txt' will be
                              appended to the input file.
+  -s                         Number of rows to skip from the input file. Default value is 0.
+  -t                         to test the performance of the convolution program. No default value.
+  -h, --help                 display this help and exit
+  -v, --version              output version information and exit
+  -w                         If provided input b data will be written to the output file.
 
-  -t                         to test the performance of the convolution program.
-  -h, --help     display this help and exit
-  -v, --version  output version information and exit
 
 The INT argument is an integer.
 The STRING argument is a string of characters.
+
+A line that begins with '#' is considered a commented line.
 
 Exit status:
  0  if OK,
  1  if minor problems (e.g., cannot access subdirectory),
  2  if serious trouble (e.g., cannot access command-line argument).
+
 )***";
     cout << hlp << endl;
 }
