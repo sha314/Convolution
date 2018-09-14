@@ -11,6 +11,7 @@
 #include "src/convolution.h"
 #include "src/data_reader.h"
 #include "src/printer.h"
+#include "src/string_methods.h"
 
 
 using namespace std;
@@ -83,7 +84,6 @@ Exit status:
  0  if OK,
  1  if minor problems (e.g., cannot access subdirectory),
  2  if serious trouble (e.g., cannot access command-line argument).
-
 )***";
     cout << hlp << endl;
 }
@@ -266,13 +266,13 @@ void cmd_args(int argc, char* argv[]){
     if(write_header_and_comment) {
         ifstream fin(in_filename);
         string str;
-        while (fin >> str) {
-            if (str.substr(str.find(' '))[0] == '{') {
-                fout << str << endl;
+        while (std::getline(fin, str)) {
+            auto trimed = trim(str, ' ');
+            if(isdigit(trimed[0])){
+                break;
             }
-            else if (str.substr(str.find(' '))[0] == '#') {
-                fout << str << endl;
-            }
+            cout << str << endl;
+            fout << str << endl;
         }
         fin.close();
     }
@@ -310,6 +310,7 @@ int main(int argc, char* argv[]) {
 //    test_in_main(argc, argv);
 //    test_multi_in_main(argc, argv);
     cmd_args(argc, argv);
+
 
     auto t1 = std::chrono::system_clock::now();
 

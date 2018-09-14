@@ -16,6 +16,6 @@ set(SOURCE_FILES
         src/data_reader.h
         src/test1.cpp
         src/printer.h
-        )
+        src/string_methods.cpp src/string_methods.h)
 
 add_executable(convolution ${SOURCE_FILES})

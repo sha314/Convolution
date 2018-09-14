@@ -18,7 +18,7 @@ using namespace std;
 
 void take_input_cmd(string &filename, unsigned int &ic, string &icolumn_name, vector<int> &usecols,
                     vector<string> &usecols_names, int &header_type) {
-    cout << "Enter filename : ";
+    cout << "Enter _filename : ";
     getline(cin, filename);
 
     cout << "Enter independent column : ";
@@ -63,7 +63,7 @@ void take_input_cmd(string &filename, unsigned int &ic, string &icolumn_name, ve
 
 void take_input_json_cmd(string &filename, unsigned int &ic, string &icolumn_name, vector<int> &usecols,
                          vector<string> &usecols_names) {
-    cout << "Enter filename : ";
+    cout << "Enter _filename : ";
     getline(cin, filename);
 
     cout << "Enter independent column : ";
@@ -101,7 +101,7 @@ void take_input_json_cmd(string &filename, unsigned int &ic, string &icolumn_nam
 }
 
 void run_program(){
-    cout << "Enter filename : ";
+    cout << "Enter _filename : ";
     string filename;
     getline(cin, filename);
 
@@ -445,7 +445,7 @@ void test_in_main(int argc, char **argv){
     string filename = "sq_lattice_site_percolation_periodic_200-calculated-.txt";
     vector<double> independent_data = loadtxt(filename, 0, 1);
 
-//    vector<double> data = loadtxt(filename, 1, 1);
+//    vector<double> data = loadtxt(_filename, 1, 1);
     size_t n = atoi(argv[1]);
     vector<double> data(n);
     for(size_t i{}; i != data.size(); ++i){
@@ -458,7 +458,7 @@ void test_in_main(int argc, char **argv){
     vector<double> out_data = conv.run_pthread(data);
     conv.timeElapsed();
 
-//    string outfilename = filename + "_convolved.txt";
+//    string outfilename = _filename + "_convolved.txt";
 //    ofstream fout(outfilename);
 //    // with their names and appropriate header
 //
