@@ -9,10 +9,10 @@
 #include <map>
 #include <chrono>
 
-#include "binomial.h"
-#include "convolution.h"
-#include "data_reader.h"
-#include "printer.h"
+#include "../convolution/binomial.h"
+#include "../convolution/convolution.h"
+#include "../data_reader.h"
+#include "../printer.h"
 
 using namespace std;
 

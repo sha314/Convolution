@@ -7,11 +7,11 @@
 #include <chrono>
 #include <cstring>
 
-#include "src/binomial.h"
-#include "src/convolution.h"
-#include "src/data_reader.h"
-#include "src/printer.h"
-#include "src/string_methods.h"
+#include "convolution/binomial.h"
+#include "convolution/convolution.h"
+#include "data_reader.h"
+#include "printer.h"
+#include "string_methods.h"
 
 
 using namespace std;
@@ -308,11 +308,7 @@ int main(int argc, char* argv[]) {
 
     auto t0 = std::chrono::system_clock::now();
 
-//    run_in_main(argc, argv);
-//    test_in_main(argc, argv);
-//    test_multi_in_main(argc, argv);
     cmd_args(argc, argv);
-
 
     auto t1 = std::chrono::system_clock::now();
 

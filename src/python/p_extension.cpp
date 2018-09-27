@@ -9,7 +9,7 @@ extern "C"{
 }
 
 #include <iostream>
-#include "../convolution.h"
+#include "../convolution/convolution.h"
 
 // use with python3.x
 using namespace std;
