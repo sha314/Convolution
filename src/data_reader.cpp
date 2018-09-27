@@ -15,49 +15,6 @@ using namespace std;
 
 
 /**
- * Read Header of data files
- * @param filename
- * @param delimiter
- * @param comment
- * @return
- */
-map<string, unsigned> read_header(string filename, char delimiter, char comment){
-    ifstream fin(filename);
-
-    map<string, unsigned> header_info;
-    string line;
-    string key;
-    unsigned value;
-    bool flag{false};
-    while (getline(fin, line)){
-        if(line[0] == comment) {
-            continue;
-        }
-
-        if(line == "END_HEADER" || line == "END_HEADER\r" || line == "END_HEADER\n"){
-            flag = false;
-            break;  // end of header reached
-        }
-
-
-        if (flag) {
-            istringstream iss(line);
-            iss >> key;
-            iss >> value;
-            header_info[key] = value;   // store key, value in a map
-//            cout << key << "=>" << value << endl;
-        }
-//        cout << endl;
-//        cout << line << endl;
-        if(line == "BEGIN_HEADER" || line == "BEGIN_HEADER\r" || line == "BEGIN_HEADER\n"){
-            flag = true;
-        }
-
-    }
-    return header_info;
-}
-
-/**
  * Requirement:
  *  Only First line of the file should contain the header information
  *  // todo start scanning from '{' and end at '}'

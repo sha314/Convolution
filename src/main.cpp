@@ -5,7 +5,7 @@
 #include <sstream>
 #include <map>
 #include <chrono>
-#include <cstring>
+
 
 #include "convolution/binomial.h"
 #include "convolution/convolution.h"
@@ -17,38 +17,10 @@
 using namespace std;
 
 
-/**
- * string to int conversion. using recursion.
- * @param str
- * @param h
- * @return
- */
-constexpr unsigned int str2int(const char* str, int h=0)
-{
-    return !str[h] ? 1 : (str2int(str, h+1) * 2) ^ str[h];
-}
-
-/**
- * string to int conversion. using loop.
- * @param str
- * @return
- */
-unsigned int str_to_int(const char* str)
-{
-    unsigned x = 1;
-    int len = strlen(str);
-    // cout << "len, str " << len << ", " << str << endl;
-    for(int i=len-1; i>=0 ; --i){
-        x *= 2;
-        x = x ^ str[i];
-    }
-    // cout << x << endl;
-    return x;
-}
-
 void version(){
 
 }
+
 void help(){
     string hlp = R"***(Usage:
 convolution [-f <STRING>] [-a <INT>,<INT>,...[:[<STRING>,<STRING>,...]]] [-b <INT>,<INT>,...[:[<STRING>,<STRING>,...]]] [-h] [-t <INT>] [-i <STRING>]
