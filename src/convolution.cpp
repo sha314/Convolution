@@ -520,6 +520,7 @@ vector<double> Convolution::run(vector<double>& data_in) {
     }
     vector<double> data_out(_number_of_data);
     auto t0 = chrono::system_clock::now();
+    long step = _number_of_data / 1000;
     for (long j=0; j <_number_of_data; ++j)
     {
         double prob     = (double) j / _number_of_data;
@@ -556,6 +557,13 @@ vector<double> Convolution::run(vector<double>& data_in) {
 
         // normalizing data
         data_out[j] = sum / binomNormalization_const;
+        if(j % step == 0) {
+            cout << "\33[2K"; // erase the current line
+            cout << '\r'; // return the cursor to the start of the line
+//            cout << "row " << j << " ";
+            cout << "progress " << j * 100 / double(_number_of_data) << " %";
+            std::fflush(stdout);
+        }
 
     }
     auto t1 = chrono::system_clock::now();
@@ -578,9 +586,9 @@ vector<double> Convolution::run_omp(vector<double>& data_in) {
     }
     vector<double> data_out(_number_of_data);
     auto t0 = chrono::system_clock::now();
-
+    long step = _number_of_data / 1000;
     // entering parallel region
-#pragma omp parallel for
+#pragma omp parallel for schedule(dynamic)
     for (long j=0; j <_number_of_data; ++j)
     {
         double prob     = (double) j / _number_of_data;
@@ -617,6 +625,13 @@ vector<double> Convolution::run_omp(vector<double>& data_in) {
 
         // normalizing data
         data_out[j] = sum / binomNormalization_const;
+        if(j % step == 0) {
+            cout << "\33[2K"; // erase the current line
+            cout << '\r'; // return the cursor to the start of the line
+//            cout << "row " << j << " ";
+            cout << "progress " << j * 100 / double(_number_of_data) << " %";
+            std::fflush(stdout);
+        }
 
     }
     auto t1 = chrono::system_clock::now();
@@ -639,7 +654,7 @@ vector<double> Convolution::run_acc(vector<double>& data_in) {
     }
     vector<double> data_out(_number_of_data);
     auto t0 = chrono::system_clock::now();
-
+    long step = _number_of_data / 1000;
     // entering parallel region
     // take copy of arrays to each loop
 #pragma acc data copy(data_out[0:_number_of_data]) copyin(_forward_factor[0:_number_of_data],_backward_factor[0:_number_of_data],d[0:_number_of_data])
@@ -680,6 +695,13 @@ vector<double> Convolution::run_acc(vector<double>& data_in) {
 
         // normalizing data
         data_out[j] = sum / binomNormalization_const;
+        if(j % step == 0) {
+            cout << "\33[2K"; // erase the current line
+            cout << '\r'; // return the cursor to the start of the line
+//            cout << "row " << j << " ";
+            cout << "progress " << j * 100 / double(_number_of_data) << " %";
+            std::fflush(stdout);
+        }
 
     }
     auto t1 = chrono::system_clock::now();
@@ -843,10 +865,6 @@ std::vector<std::vector<double>> Convolution::run_multi(vector<vector<double>> &
         ++_count;
 
         vector<double> sum(n_columns);
-        if(row % step == 0) {
-            // only to know the progress
-            cout << prob << " %" << endl; // output to the console
-        }
         for(size_t k{}; k < n_columns; ++k){
             sum[k] = data_in[row][k];
         }
@@ -886,7 +904,13 @@ std::vector<std::vector<double>> Convolution::run_multi(vector<vector<double>> &
             data_out[row][j] = sum[j] / binomNormalization_const;
 //            cout << "j " << j << endl;
         }
-
+        if(row % step == 0) {
+            cout << "\33[2K"; // erase the current line
+            cout << '\r'; // return the cursor to the start of the line
+//            cout << "row " << row << " ";
+            cout << "progress " << row * 100 / double(n_rows) << " %";
+            std::fflush(stdout);
+        }
     }
     auto t1 = chrono::system_clock::now();
     _time_elapsed_convolution = chrono::duration<double>(t1 - t0).count();
@@ -928,7 +952,9 @@ std::vector<std::vector<double>> Convolution::run_multi_omp(vector<vector<double
     auto t0 = chrono::system_clock::now();
 
     // entering parallel region
-#pragma omp parallel for
+    cout << endl;
+    long step = n_rows / 1000;
+#pragma omp parallel for schedule(dynamic)
     for (long row=0; row < n_rows; ++row){
         data_out[row].resize(n_columns); // space for columns
         double prob     = (double) row / n_rows;
@@ -977,10 +1003,18 @@ std::vector<std::vector<double>> Convolution::run_multi_omp(vector<vector<double
             data_out[row][j] = sum[j] / binomNormalization_const;
 //            cout << "j " << j << endl;
         }
+        if(row % step == 0) {
+            cout << "\33[2K"; // erase the current line
+            cout << '\r'; // return the cursor to the start of the line
+//            cout << "row " << row << " ";
+            cout << "progress " << row * 100 / double(n_rows) << " %";
+            std::fflush(stdout);
+        }
 
     }
     auto t1 = chrono::system_clock::now();
     _time_elapsed_convolution = chrono::duration<double>(t1 - t0).count();
+    cout << endl;
     return data_out;
 }
 
