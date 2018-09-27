@@ -188,9 +188,11 @@ void cmd_args(int argc, char* argv[]){
                 ++i;
                 break;
             case str2int("-f"):
+                cout << "parse : line " << __LINE__ << endl;
                 ++i;
                 if(i < argc) {
                     in_filename = argv[i];
+                    cout << in_filename << endl;
                 }
                 ++i;
                 break;
