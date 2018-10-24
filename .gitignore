@@ -1,2 +1,4 @@
+./test-python-api
+*.so
 *.iml
 *.xml

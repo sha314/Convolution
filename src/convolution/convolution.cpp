@@ -6,8 +6,8 @@
 #include <iostream>
 #include <thread>
 #include <mutex>
-#include "convolution.h"
-#include "binomial.h"
+#include "../include/convolution.h"
+#include "../include/binomial.h"
 
 using namespace std;
 
@@ -487,7 +487,7 @@ std::vector<std::vector<double>> Convolution::run_multi_omp(vector<vector<double
 
     // entering parallel region
     cout << endl;
-    long step = n_rows / 1000;
+    long step = n_rows / 1000 + 1;
 #pragma omp parallel for schedule(dynamic)
     for (long row=0; row < n_rows; ++row){
         data_out[row].resize(n_columns); // space for columns
@@ -507,7 +507,6 @@ std::vector<std::vector<double>> Convolution::run_multi_omp(vector<vector<double
         // forward iteration part
         factor = prob / (1-prob);
         prev   = 1;
-
         for (long i=row+1; i < n_rows; ++i)
         {
             binom     = prev * _forward_factor[i] * factor;
@@ -521,7 +520,6 @@ std::vector<std::vector<double>> Convolution::run_multi_omp(vector<vector<double
         // backward iteration part
         factor = (1-prob)/prob;
         prev   = 1;
-
         for (long i=row-1; i>=0; --i)
         {
             binom     = prev * _backward_factor[i] * factor;
@@ -538,6 +536,7 @@ std::vector<std::vector<double>> Convolution::run_multi_omp(vector<vector<double
 //            cout << "j " << j << endl;
         }
         if(row % step == 0) {
+//            cout << "In python comment this block. line " << __LINE__ << endl;
             cout << "\33[2K"; // erase the current line
             cout << '\r'; // return the cursor to the start of the line
 //            cout << "row " << row << " ";

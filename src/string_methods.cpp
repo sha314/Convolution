@@ -3,7 +3,7 @@
 //
 
 #include <algorithm>
-#include "string_methods.h"
+#include "include/string_methods.h"
 
 std::string trim(std::string str, char ch) {
     str.erase(str.begin(), std::find_if(str.begin(), str.end(), [&](int c) {
