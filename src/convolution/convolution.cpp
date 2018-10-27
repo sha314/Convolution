@@ -6,8 +6,8 @@
 #include <iostream>
 #include <thread>
 #include <mutex>
-#include "convolution.h"
-#include "binomial.h"
+#include "../include/convolution.h"
+#include "../include/binomial.h"
 #include <omp.h>
 
 using namespace std;

@@ -2,8 +2,8 @@
 // Created by shahnoor on 10/27/18.
 //
 
-#include "data_writer.h"
-#include "string_methods.h"
+#include "include/data_writer.h"
+#include "include/string_methods.h"
 #include <iomanip>
 #include <fstream>
 
