@@ -1,2 +1,6 @@
+./test-python-api
+.idea
+*.so
+*.py
 *.iml
 *.xml

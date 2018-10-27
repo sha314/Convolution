@@ -5,6 +5,7 @@
 #include <sstream>
 #include <map>
 #include <chrono>
+#include <iomanip>
 
 
 #include "convolution/binomial.h"
@@ -12,6 +13,9 @@
 #include "data_reader.h"
 #include "printer.h"
 #include "string_methods.h"
+#include "data_writer.h"
+#include "tests/test.h"
+
 
 
 using namespace std;
@@ -59,8 +63,178 @@ Exit status:
 )***";
     cout << hlp << endl;
 }
-
-
+//
+//
+//map<string,string>
+//parse_argument(int argc, char* argv[]){
+//    map<string,string> arguemnts;
+////    arguemnts["in_filename"] = "";
+////    arguemnts["out_filename"] = "";
+////    arguemnts["in_filename"] = "";
+////    arguemnts["in_filename"] = "";
+////    arguemnts["in_filename"] = "";
+////    arguemnts["in_filename"] = "";
+//
+//    cout << "Arguments" << endl;
+//
+//    size_t test_size{0};
+//    vector<int> a_usecols, b_usecols; // b_usecols will be convolved and a_usecols will remain unchanged
+//    vector<string> a_names, b_names;
+//    string info;
+//    bool write_header_and_comment{false};
+//    int skiprows{0};
+//    char delimeter{' '};
+//    bool write_input_data {false};
+//    int flg;
+//    if(argc == 1){
+//        help();
+//        exit(0);
+//    }
+//    for(int i{1}; i < argc;){
+//        cout << argv[i] << endl;
+//
+//        flg = str2int(argv[i]);
+//        switch (flg){
+//
+//            case str2int("-a"):
+//                cout << "parse : line " << __LINE__ << endl;
+//                ++i;
+//                if(i < argc) {
+//                    string tmp = argv[i];
+//                    cout << tmp << endl;
+//                    int sep = tmp.find(':');
+//                    if(sep < 0){
+//                        // no name is provided
+//                        a_usecols = explode_to_int(tmp, ',');
+//                        for(size_t k{}; k < a_usecols.size(); ++k){
+//                            a_names.push_back("<>");
+//                        }
+//                    }else {
+//                        string first = tmp.substr(0, sep);
+//
+//                        string second = tmp.substr(sep + 1);
+////                        cout << "first " << first << endl;
+////                        cout << "second " << second << endl;
+//
+//                        a_usecols = explode_to_int(first, ',');
+//                        a_names = explode_to_string(second, ',');
+//                        if(a_names.size() != a_usecols.size()){
+//                            cout << "not enough column index or name" ;
+//                            cout << ": line " << __LINE__ ; // comment this on deployment
+//                            cout << endl;
+//                        }
+//                    }
+//                }
+//                ++i;
+//                break;
+//            case str2int("-b"):
+//                cout << "parse : line " << __LINE__ << endl;
+//                ++i;
+//                if(i < argc) {
+//                    string tmp = argv[i];
+//                    cout << tmp << endl;
+//                    int sep = tmp.find(':');
+//                    if(sep < 0){
+//                        // no name is provided
+//                        b_usecols = explode_to_int(tmp, ',');
+//                        for(size_t k{}; k < b_usecols.size(); ++k){
+//                            b_names.push_back("<>");
+//                        }
+//                    }else {
+//                        string first = tmp.substr(0, sep);
+//
+//                        string second = tmp.substr(sep + 1);
+////                        cout << "first " << first << endl;
+////                        cout << "second " << second << endl;
+//
+//                        b_usecols = explode_to_int(first, ',');
+//                        b_names = explode_to_string(second, ',');
+//                        if(b_names.size() != b_usecols.size()){
+//                            cout << "not enough column index or name" ;
+//                            cout << ": line " << __LINE__ ; // comment this on deployment
+//                            cout << endl;
+//                        }
+//                    }
+//                }
+//                ++i;
+//                break;
+//            case str2int("-c"):
+//                write_header_and_comment = true;
+//                ++i;
+//                break;
+//            case str2int("-d"):
+//                ++i;
+//                if(i < argc) {
+//                    delimeter = argv[i][0];
+//                }
+//                ++i;
+//                break;
+//            case str2int("-f"):
+//                cout << "parse : line " << __LINE__ << endl;
+//                ++i;
+//                if(i < argc) {
+//                    arguemnts["in_filename"] = argv[i];
+//                }
+//                ++i;
+//                break;
+//            case str2int("-i"):
+//                ++i;
+//                if(i < argc) {
+//                    info = argv[i];
+//                }
+//                ++i;
+//                break;
+//
+//            case str2int("-o"):
+//                ++i;
+//                if(i < argc) {
+//                    arguemnts["out_filename"] = argv[i];
+//                }
+//                ++i;
+//                break;
+//            case str2int("-s"):
+//                ++i;
+//                if(i < argc) {
+//                    skiprows = stoi(argv[i]);
+//                }
+//                ++i;
+//                break;
+//            case str2int("-t"):
+//                ++i;
+//                if(i < argc) {
+//                    arguemnts["test_size"] = (size_t)stoi(argv[i]);
+//                }
+//                ++i;
+//                break;
+//            case str2int("-h"):
+//            case str2int("--help"):
+//                help();
+//                exit(0);
+//                break;
+//            case str2int("-v"):
+//            case str2int("--version"):
+//                version();
+//                exit(0);
+//                break;
+//            case str2int("-w"):
+//                write_input_data = true;
+//                break;
+//            default:
+//                help();
+//                exit(0);
+//        }
+//
+//    }
+//
+////    print_vector(a_usecols);
+////    print_vector(a_names);
+////    print_vector(b_usecols);
+////    print_vector(b_names);
+//
+//    if(out_filename.empty()){
+//        out_filename = in_filename + out_file_flag;
+//    }
+//}
 
 void cmd_args(int argc, char* argv[]){
     cout << "Arguments" << endl;
@@ -232,41 +406,24 @@ void cmd_args(int argc, char* argv[]){
 
     // performing convolution
     Convolution conv;
-    vector<vector<double>> b_data_out = conv.run_multi_omp(b_data_in);
+//    vector<vector<double>> b_data_out = conv.run_multi_omp(b_data_in);
+    vector<vector<double>> b_data_out = conv.run_multi_omp_v2(b_data_in);
     conv.timeElapsed();
 
     // writing output to file
-    ofstream fout(out_filename);
-    if(write_header_and_comment) {
-        ifstream fin(in_filename);
-        string str;
-        while (std::getline(fin, str)) {
-            auto trimed = trim(str, ' ');
-            if(isdigit(trimed[0])){
-                break;
-            }
-            cout << str << endl;
-            fout << str << endl;
-        }
-        fin.close();
-    }
-    fout << '#' << info << endl; // info cannot contain a new line character
-    fout << "#convoluted data" << endl;
+    savetxt_multi(in_filename,
+                  out_filename,
+                  info,
+                  write_header_and_comment,
+                  delimeter,
+                  write_input_data,
+                  a_data,
+                  b_data_in,
+                  b_data_out,
+                  10);
 
-    for(size_t i{}; i < b_data_in.size(); ++i){
-        for(size_t j{}; j < a_data[0].size(); ++j){
-            fout << a_data[i][j];
-        }
-        for(size_t j{}; j < b_data_in[0].size(); ++j){
-            if(write_input_data){
-                fout << delimeter << b_data_in[i][j];
-            }
-            fout << delimeter << b_data_out[i][j];
-        }
-        fout << endl;
-    }
-    fout.close();
 }
+
 
 
 /***
