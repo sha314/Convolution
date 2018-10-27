@@ -11,9 +11,14 @@
 std::vector<double> convolve_v1(const std::vector<double>& data);
 std::vector<double> convolve_v2(const std::vector<double>& data);
 std::vector<double> convolve_v3(const std::vector<double>& data);
+// 27 October, 2018
+std::vector<double> convolve_v4(const std::vector<double>& data_in);
 
 std::vector<std::vector<double>> convolve_multi_v1(const std::vector<std::vector<double>>& data);
 std::vector<std::vector<double>> convolve_multi_v2(const std::vector<std::vector<double>>& data);
+
+// 27 October, 2018
+std::vector<std::vector<double>> convolve_multi_v3(const std::vector<std::vector<double>>& data_in);
 // 7 July, 2018
 std::vector<std::vector<double>> convolve_multi_threaded_v1(const std::vector<std::vector<double>> &data_in);
 // 8 July, 2018

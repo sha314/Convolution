@@ -147,6 +147,83 @@ vector<double> convolve_v3(const vector<double>& data) {
     return out_data;
 }
 
+/**
+ * Perform convolution of a given data list (single column) using the following formula
+ *    X_p = B(N, n, p) * X_n
+ *    where, B(N, n, p) = N^C_n * p^n * (1-p)^(N-n)
+ * Since it is costly to use this formula directly, this function uses a simplified one
+ *    B(N,i,p) = 1  # is set arbitrarily
+ *    B(N,n,p) = B(N, n-1, p) * ((N-n+1)/n) * (p/(1-p))    # for i > n
+ *    B(N,n,p) = B(N, n+1, p) * (n+1)/(N-n)) * ((1-p)/p)   # for i < n
+ * Optimized by Digonto vai
+ * @param data_in : array of double valued data
+ * @return     : array of double valued convolved data
+ */
+vector<double> convolve_v4(const vector<double>& data_in) {
+    size_t N = data_in.size();
+
+    vector<double> _forward_factor(N);
+    vector<double> _backward_factor(N);
+
+    for (size_t i=0; i < N; ++i)
+    {
+        _forward_factor[i]  = (double) (N - i + 1) / i;
+        _backward_factor[i] = (double) (i + 1) / (N - i);
+    }
+
+    vector<double> data_out(N);
+
+    long step = N / 1000;
+    for (long j=0; j <N; ++j) // start from j=1
+    {
+        double prob     = (double) j / N;
+        double factor   = 0;
+        double binom    = 0;
+        double prev     = 0;
+        double bn_tot   = 1; // normalization factor
+        double sum      = data_in[j];
+
+
+        // forward iteraion part
+        factor = prob / (1-prob);
+        prev   = 1;
+
+        for (long i=j+1; i<N; ++i)
+        {
+            binom     = prev * _forward_factor[i] * factor;
+            bn_tot += binom;
+            sum      += data_in[i] * binom;
+            prev      = binom;
+        }
+
+        // backward iteration part
+        factor = (1-prob)/prob;
+        prev   = 1;
+
+        for (long i=j-1; i>=0; --i)
+        {
+            binom     = prev * _backward_factor[i] * factor;
+            bn_tot += binom;
+            sum      += data_in[i] * binom;
+            prev      = binom;
+        }
+
+        // normalizing data_in
+        data_out[j] = sum / bn_tot;
+        cout << bn_tot << endl;
+//        if(j % step == 0) {
+//            cout << "\33[2K"; // erase the current line
+//            cout << '\r'; // return the cursor to the start of the line
+////            cout << "row " << j << " ";
+//            cout << "progress " << j * 100 / double(N) << " %";
+//            std::fflush(stdout);
+//        }
+
+    }
+
+
+    return data_out;
+}
 
 /**
  * Progress information in the console.
@@ -270,7 +347,107 @@ vector<vector<double>> convolve_multi_v2(const vector<vector<double>>& data) {
     return out_data;
 }
 
+/**
+ * Perform convolution of a given data list (multiple column) using the following formula
+ *    X_p = B(N, n, p) * X_n
+ *    where, B(N, n, p) = N^C_n * p^n * (1-p)^(N-n)
+ * Since it is costly to use this formula directly, this function uses a simplified one
+ *    B(N,i,p) = 1  # is set arbitrarily
+ *    B(N,n,p) = B(N, n-1, p) * ((N-n+1)/n) * (p/(1-p))    # for i > n
+ *    B(N,n,p) = B(N, n+1, p) * (n+1)/(N-n)) * ((1-p)/p)   # for i < n
+ *
+ * Optimized by Digonto vai
+ *
+ * @param data_in : n-dimensional array of double valued data
+ *      for example: following data has 3 columns and N rows
+ *              0.25    0.454   0.548
+ *              0.457   0.187   0.154
+ *              0.578   0.951   0.487
+ *              .       .       .
+ *              .       .       .
+ *              .       .       .
+ * @return     : n-dimensional array of double valued convolved data
+ */
+vector<vector<double>> convolve_multi_v3(const vector<vector<double>>& data_in) {
+    size_t n_columns = data_in[0].size(); // number of columns
+    size_t n_rows = data_in.size(); // number of rows
 
+//    cout << "rows " << n_rows << endl;
+//    cout << "cols " << n_columns << endl;
+
+    vector<double> _forward_factor(n_rows);
+    vector<double> _backward_factor(n_rows);
+
+    for (size_t i=0; i < n_rows; ++i)
+    {
+        _forward_factor[i]  = (double) (n_rows - i + 1) / i;
+        _backward_factor[i] = (double) (i + 1) / (n_rows - i);
+    }
+
+
+    vector<vector<double>> data_out(n_rows);
+
+    size_t step = n_rows / 1000;
+
+    for (long row=0; row < n_rows; ++row){
+        data_out[row].resize(n_columns); // space for columns
+        double prob     = (double) row / n_rows;
+        double factor   = 0;
+        double binom    = 0;
+        double prev     = 0;
+        double binomNormalization_const = 1;
+
+
+        vector<double> sum(n_columns);
+        for(size_t k{}; k < n_columns; ++k){
+            sum[k] = data_in[row][k];
+        }
+
+//        cout << "line : " << __LINE__ << endl;
+
+        // forward iteration part
+        factor = prob / (1-prob);
+        prev   = 1;
+
+        for (long i=row+1; i < n_rows; ++i)
+        {
+            binom     = prev * _forward_factor[i] * factor;
+            binomNormalization_const += binom;
+            for(size_t j{}; j < n_columns; ++j){
+                sum[j] += data_in[i][j] * binom;
+            }
+            prev      = binom;
+        }
+//        cout << "line : " << __LINE__ << endl;
+        // backward iteration part
+        factor = (1-prob)/prob;
+        prev   = 1;
+
+        for (long i=row-1; i>=0; --i)
+        {
+            binom     = prev * _backward_factor[i] * factor;
+            binomNormalization_const += binom;
+            for(size_t j{}; j < n_columns; ++j){
+                sum[j] += data_in[i][j] * binom;
+            }
+            prev      = binom;
+        }
+
+        // normalizing data_in
+        for(size_t j{}; j < n_columns; ++j){
+            data_out[row][j] = sum[j] / binomNormalization_const;
+
+        }
+        if(row % step == 0) {
+            cout << "\33[2K"; // erase the current line
+            cout << '\r'; // return the cursor to the start of the line
+            cout << "progress " << row * 100 / double(n_rows) << " %";
+            std::fflush(stdout);
+        }
+    }
+
+    return data_out;
+}
 
 /**
  *
@@ -589,7 +766,7 @@ vector<double> Convolution::run_omp(vector<double>& data_in) {
     auto t0 = chrono::system_clock::now();
     long step = N / 1000;
     // entering parallel region
-#pragma omp parallel for schedule(dynamic)
+#pragma omp parallel for schedule(dynamic) num_threads(_number_of_threads)
     for (long j=0; j <N; ++j)
     {
         double prob     = (double) j / N;
