@@ -8,6 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <iomanip>
 
 
 using namespace std;
@@ -191,7 +192,7 @@ vector<vector<double>> loadtxt(string filename, const vector<int>& usecols,
         istringstream iss(line);
         while(iss >> value) {
             tmp.push_back(value);
-//            cout << value << '\t';
+//            cout << setprecision(10) << value << '\t';
         }
 //        cout << endl;
         for(auto c : usecols){

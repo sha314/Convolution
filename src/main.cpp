@@ -421,8 +421,27 @@ void cmd_args(int argc, char* argv[]){
     }
 
     // reading input file
-    vector<vector<double>> a_data = loadtxt(in_filename, a_usecols, skiprows, delimeter);
+    if(b_usecols.empty()){
+        cerr << "no specified columns" << endl;
+        exit(1);
+    }
     vector<vector<double>> b_data_in = loadtxt(in_filename, b_usecols, skiprows, delimeter);
+    vector<vector<double>> a_data;
+    if(a_usecols.empty()){
+        unsigned long N = b_data_in.size();
+        unsigned long m = b_data_in[0].size();
+        cout << "initializing independent data with following shape ("
+             << N << "," << m << ")" << endl;
+        a_data.resize(N);
+        for(size_t i{}; i < N; ++i) {
+            a_data[i].resize(m);
+            for (size_t j{}; j < m; ++j) {
+                a_data[i][j] = double (i / N);
+            }
+        }
+    }else {
+        a_data = loadtxt(in_filename, a_usecols, skiprows, delimeter);
+    }
 
     // performing convolution
     Convolution conv(n_threads);
