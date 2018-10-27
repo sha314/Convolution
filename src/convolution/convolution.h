@@ -20,11 +20,11 @@ class Convolution{
     double _count{}; // keep record of progress percentage. very useful for multithreaded environment ???
     double _time_elapsed_initialization{};
     double _time_elapsed_convolution{};
-    int _number_of_threads{-1};
+    int _number_of_threads{1};
 public:
     ~Convolution() = default;
-    Convolution() = default;
-    explicit Convolution(int threads);
+
+    explicit Convolution(int threads=-1);
 
     std::vector<double> factor_forward() const { return _forward_factor;}
     std::vector<double> factor_backward() const { return _backward_factor;}

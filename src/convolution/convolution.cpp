@@ -6,6 +6,7 @@
 #include <iostream>
 #include <thread>
 #include <mutex>
+#include <omp.h>
 #include "convolution.h"
 #include "binomial.h"
 
@@ -18,6 +19,9 @@ using namespace std;
 
 Convolution::Convolution(int threads) {
     _number_of_threads = threads;
+    if(_number_of_threads <= 0 || _number_of_threads > omp_get_max_threads()){
+        _number_of_threads = omp_get_max_threads();
+    }
 }
 
 /**
@@ -25,14 +29,14 @@ Convolution::Convolution(int threads) {
  */
 void Convolution::initialize(size_t n)  {
     auto t0 = chrono::system_clock::now();
-    this->N = n;
-    this->_forward_factor.resize(this->N);
-    this->_backward_factor.resize(this->N);
+    N = n;
+    _forward_factor.resize(N);
+    _backward_factor.resize(N);
 
-    for (size_t i=0; i < this->N; ++i)
+    for (size_t i=0; i < N; ++i)
     {
-        this->_forward_factor[i]  = (double) (this->N - i + 1) / i;
-        this->_backward_factor[i] = (double) (i + 1) / (this->N - i);
+        _forward_factor[i]  = (double) (N - i + 1) / i;
+        _backward_factor[i] = (double) (i + 1) / (N - i);
     }
 
     auto t1 = chrono::system_clock::now();
@@ -473,8 +477,9 @@ std::vector<std::vector<double>> Convolution::run_multi_omp(vector<vector<double
     // entering parallel region
     cout << endl;
     long step = n_rows / 1000 + 1;
-#pragma omp parallel for schedule(dynamic)
+#pragma omp parallel for schedule(dynamic) num_threads(_number_of_threads)
     for (long row=0; row < n_rows; ++row){
+//        cout << "Threads " << omp_get_num_threads() << endl;
         data_out[row].resize(n_columns); // space for columns
         double prob     = (double) row / n_rows;
         double factor   = 0;
@@ -548,8 +553,9 @@ std::vector<std::vector<double>> Convolution::run_multi_omp_v2(vector<vector<dou
     // entering parallel region
     cout << endl;
     long step = n_rows / 1000 + 1;
-#pragma omp parallel for schedule(dynamic)
+#pragma omp parallel for schedule(dynamic) num_threads(_number_of_threads)
     for (long row=0; row < n_rows; ++row){
+//        cout << "Threads " << omp_get_num_threads() << endl;
         data_out[row].resize(n_columns); // space for columns
 
         vector<double> sum;
