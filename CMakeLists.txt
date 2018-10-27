@@ -17,6 +17,11 @@ set(SOURCE_FILES
         src/tests/test1.cpp
         src/include/printer.h
         src/string_methods.cpp
-        src/include/string_methods.h)
+        src/include/string_methods.h
+        src/include/data_writer.h
+        src/include/test.h
+        src/include/utype.h
+        src/data_writer.cpp
+        src/utype.cpp)
 
 add_executable(convolution ${SOURCE_FILES})
