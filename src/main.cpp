@@ -436,7 +436,7 @@ void cmd_args(int argc, char* argv[]){
         for(size_t i{}; i < N; ++i) {
             a_data[i].resize(m);
             for (size_t j{}; j < m; ++j) {
-                a_data[i][j] = double (i / N);
+                a_data[i][j] = double (i) / N;
             }
         }
     }else {
