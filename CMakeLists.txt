@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project(Convolution)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 SET(CMAKE_CXX_FLAGS  "-pthread -fopenmp")
 
@@ -14,8 +14,11 @@ set(SOURCE_FILES
         src/convolution/convolution.h
         src/data_reader.cpp
         src/data_reader.h
+        src/data_writer.cpp
+        src/data_writer.h
         src/tests/test1.cpp
         src/printer.h
-        src/string_methods.cpp src/string_methods.h)
+        src/string_methods.cpp
+        src/string_methods.h)
 
 add_executable(convolution ${SOURCE_FILES})

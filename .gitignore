@@ -1,2 +1,4 @@
 *.iml
 *.xml
+*.so
+build

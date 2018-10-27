@@ -12,6 +12,7 @@
 #include "data_reader.h"
 #include "printer.h"
 #include "string_methods.h"
+#include "data_writer.h"
 
 
 using namespace std;
