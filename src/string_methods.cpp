@@ -11,3 +11,22 @@ std::string trim(std::string str, char ch) {
     }));
     return str;
 }
+
+
+/**
+ * string to int conversion. using loop.
+ * @param str
+ * @return
+ */
+unsigned int str_to_int(const char* str)
+{
+    unsigned x = 1;
+    int len = strlen(str);
+    // cout << "len, str " << len << ", " << str << endl;
+    for(int i=len-1; i>=0 ; --i){
+        x *= 2;
+        x = x ^ str[i];
+    }
+    // cout << x << endl;
+    return x;
+}
