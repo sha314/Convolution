@@ -1,6 +1,6 @@
 
-#include "../convolution/convolution.h"
-#include "../data_reader.h"
+#include "../include/convolution.h"
+#include "../include/data_reader.h"
 #include <iostream>
 #include <fstream>
 

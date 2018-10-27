@@ -9,14 +9,14 @@ SET(CMAKE_CXX_FLAGS  "-pthread -fopenmp")
 set(SOURCE_FILES
         src/main.cpp
         src/convolution/binomial.cpp
-        src/convolution/binomial.h
+        src/include/binomial.h
         src/convolution/convolution.cpp
-        src/convolution/convolution.h
+        src/include/convolution.h
         src/data_reader.cpp
-        src/data_reader.h
+        src/include/data_reader.h
         src/tests/test1.cpp
-        src/printer.h
+        src/include/printer.h
         src/string_methods.cpp
-        src/string_methods.h src/tests/test.h src/data_writer.cpp src/data_writer.h src/utype.cpp src/utype.h)
+        src/include/string_methods.h src/include/test.h src/data_writer.cpp src/include/data_writer.h src/utype.cpp src/include/utype.h)
 
 add_executable(convolution ${SOURCE_FILES})

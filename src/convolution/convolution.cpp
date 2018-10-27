@@ -7,8 +7,8 @@
 #include <thread>
 #include <mutex>
 #include <omp.h>
-#include "convolution.h"
-#include "binomial.h"
+#include "../include/convolution.h"
+#include "../include/binomial.h"
 
 using namespace std;
 

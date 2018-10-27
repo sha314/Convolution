@@ -8,13 +8,13 @@
 #include <iomanip>
 
 
-#include "convolution/binomial.h"
-#include "convolution/convolution.h"
-#include "data_reader.h"
-#include "printer.h"
-#include "string_methods.h"
-#include "data_writer.h"
-#include "tests/test.h"
+#include "include/binomial.h"
+#include "include/convolution.h"
+#include "include/data_reader.h"
+#include "include/printer.h"
+#include "include/string_methods.h"
+#include "include/data_writer.h"
+#include "include/test.h"
 
 
 
