@@ -1,6 +1,7 @@
 
-#include "../include/convolution.h"
-#include "../include/data_reader.h"
+#include "../convolution/convolution.h"
+#include "../io/data_reader.h"
+#include "test2.h"
 #include <iostream>
 #include <fstream>
 
@@ -32,15 +33,19 @@ void test_convolution_basic(size_t N){
 
 }
 
-void test_convolution(){
-    string filename="network_BA_explosive_400000N_5m_10M_30000ens_susceptibility.txt";
+void test1_convolution(){
+    string filename="data_json.txt";
     vector<double> a = loadtxt(filename, 0, 0, ' ');
     vector<double> b_data_in = loadtxt(filename, 1, 0, ' ');
     Convolution convolution;
     auto b_data_out = convolution.run(b_data_in);
-    ofstream fout(filename+"_convoluted.txt");
-    for(size_t i{}; i < b_data_in.size(); ++i){
-        fout << a[i] << '\t' << b_data_out[i] << endl;
-    }
-    fout.close();
+    auto f_factor = convolution.factor_forward();
+    auto b_factor = convolution.factor_backward();
+    view(f_factor);
+    view(b_factor);
+//    ofstream fout(filename+"_convoluted.txt");
+//    for(size_t i{}; i < b_data_in.size(); ++i){
+//        fout << a[i] << '\t' << b_data_out[i] << endl;
+//    }
+//    fout.close();
 }

@@ -8,14 +8,14 @@
 #include <iomanip>
 
 
-#include "include/binomial.h"
-#include "include/convolution.h"
-#include "include/data_reader.h"
+#include "convolution/binomial.h"
+#include "convolution/convolution.h"
+#include "io/data_reader.h"
 #include "include/printer.h"
 #include "include/string_methods.h"
-#include "include/data_writer.h"
-#include "include/test.h"
-
+#include "io/data_writer.h"
+#include "tests/test1.h"
+#include "tests/test2.h"
 
 
 using namespace std;
@@ -395,12 +395,12 @@ void cmd_args(int argc, char* argv[]){
             case str2int("--help"):
                 help();
                 exit(0);
-                break;
+
             case str2int("-v"):
             case str2int("--version"):
                 version();
                 exit(0);
-                break;
+
             case str2int("-w"):
                 write_input_data = true;
                 break;
@@ -425,7 +425,8 @@ void cmd_args(int argc, char* argv[]){
         cerr << "no specified columns" << endl;
         exit(1);
     }
-    vector<vector<double>> b_data_in = loadtxt(in_filename, b_usecols, skiprows, delimeter);
+//    view(b_usecols);
+    vector<vector<double>> b_data_in = loadtxt_v2(in_filename, b_usecols, skiprows, delimeter);
     vector<vector<double>> a_data;
     if(a_usecols.empty()){
         unsigned long N = b_data_in.size();
@@ -440,9 +441,9 @@ void cmd_args(int argc, char* argv[]){
             }
         }
     }else {
-        a_data = loadtxt(in_filename, a_usecols, skiprows, delimeter);
+        a_data = loadtxt_v2(in_filename, a_usecols, skiprows, delimeter);
     }
-
+//    view_matrix(b_data_in);
     // performing convolution
     Convolution conv(n_threads);
     vector<vector<double>> b_data_out = conv.run_multi_omp(b_data_in);
@@ -477,6 +478,8 @@ int main(int argc, char* argv[]) {
     auto t0 = std::chrono::system_clock::now();
 
     cmd_args(argc, argv);
+//    test1_convolution();
+//    test2_convolution();
 
     auto t1 = std::chrono::system_clock::now();
 

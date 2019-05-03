@@ -19,9 +19,13 @@ std::vector<double> loadtxt(std::string filename, int usecols,
 std::vector<std::vector<double>> loadtxt(std::string filename, const std::vector<int>& usecols,
                                          int skiprows, char delemiter=' ', char comment='#');
 
+std::vector<std::vector<double>> loadtxt_v2(std::string filename, const std::vector<int>& usecols,
+                                         int skiprows, char delemiter=' ', char comment='#');
+
 
 std::vector<std::string> explode_to_string(const std::string &str, const char &ch);
 std::vector<int>         explode_to_int(const std::string &str, const char &ch);
+std::vector<double>      explode_to_float(const std::string &s, const char &c);
 
 std::string output_header_json(
         const std::string& icolumn_name,

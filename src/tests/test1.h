@@ -7,6 +7,6 @@
 
 void test_factors();
 void test_convolution_basic(size_t N= 100);
-void test_convolution();
+void test1_convolution();
 
 #endif //CONVOLUTION_TEST_H

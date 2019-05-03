@@ -2,7 +2,8 @@
 // Created by shahnoor on 2/2/2018.
 //
 
-#include "include/data_reader.h"
+#include "data_reader.h"
+#include "../tests/test2.h"
 
 #include <iostream>
 #include <fstream>
@@ -122,11 +123,32 @@ vector<int> explode_to_int(const string &s, const char &c)
 }
 
 /**
+ * explode a string to vector of floting number
+ * @param s
+ * @param c
+ * @return
+ */
+vector<double> explode_to_float(const string &s, const char &c)
+{
+    string buff{""};
+    vector<double> v;
+
+    for(auto n:s)
+    {
+        if(n != c) buff+=n; else
+        if(n == c && buff != "") { v.push_back(atof(buff.c_str())); buff = ""; }
+    }
+    if(buff != "") v.push_back(atof(buff.c_str()));
+
+    return v;
+}
+
+/**
  * Reads data from files
  * @param filename  : name of the file
  * @param usecols   : column to read
  * @param skiprows  : number of rows to be skipped (commented or uncommented)
- * @param delimiter : character used as delemeter in the file
+ * @param delimiter : character used as delemeter in the file // TODO
  * @param comment   : character used as comment in the file
  * @return : data of the column
  */
@@ -168,7 +190,7 @@ vector<double> loadtxt(string filename, int usecol,
  * @param filename  : name of the file
  * @param usecols   : columns to read
  * @param skiprows  : number of rows to be skipped (commented or uncommented)
- * @param delimiter : character used as delemeter in the file
+ * @param delimiter : character used as delemeter in the file // TODO
  * @param comment   : character used as comment in the file
  * @return : data of the columns
  */
@@ -207,6 +229,51 @@ vector<vector<double>> loadtxt(string filename, const vector<int>& usecols,
     return data;
 }
 
+/**
+ * Reads columns of data from files
+ * @param filename  : name of the file
+ * @param usecols   : columns to read
+ * @param skiprows  : number of rows to be skipped (commented or uncommented)
+ * @param delimiter : character used as delemeter in the file
+ * @param comment   : character used as comment in the file
+ * @return : data of the columns
+ */
+vector<vector<double>> loadtxt_v2(string filename, const vector<int>& usecols,
+                               int skiprows, char delimiter, char comment){
+//    cout << "On test " << delimiter << endl;
+    vector<vector<double>> data;
+    ifstream fin(filename);
+
+    vector<double> tmp, filtered;
+    string line;
+    unsigned r{};
+    while (getline(fin, line)){
+        if(r < skiprows){
+            ++r;
+            continue;
+        }
+        if(line[0] == comment) {
+            continue;
+        }
+        tmp = explode_to_float(line, delimiter);
+//        view(tmp);
+
+        for(auto c : usecols){
+//            cout << "column " << c << " tmp.size() " << tmp.size() << endl;
+            if(c < tmp.size()) {
+                filtered.push_back(tmp[c]);
+            } else{
+                cout << "column not found or delimiter is not correct : line " << __LINE__ << endl;
+            }
+        }
+        data.push_back(filtered);
+        tmp.clear();
+        filtered.clear();
+//        cout << line << endl;
+    }
+
+    return data;
+}
 
 
 /**

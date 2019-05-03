@@ -4,3 +4,5 @@
 *.py
 *.iml
 *.xml
+cmake-build-debug/
+cmake-build-release/

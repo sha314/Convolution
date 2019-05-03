@@ -7,8 +7,8 @@
 #include <thread>
 #include <mutex>
 #include <omp.h>
-#include "../include/convolution.h"
-#include "../include/binomial.h"
+#include "convolution.h"
+#include "binomial.h"
 
 using namespace std;
 
@@ -92,7 +92,7 @@ vector<double> Convolution::run(vector<double>& data_in) {
 
         // normalizing data
         data_out[j] = sum / bn_tot;
-        cout << bn_tot << endl;
+//        cout << bn_tot << endl;
 //        if(j % step == 0) {
 //            cout << "\33[2K"; // erase the current line
 //            cout << '\r'; // return the cursor to the start of the line

@@ -2,7 +2,7 @@
 // Created by shahnoor on 2/1/2018.
 //
 
-#include "../include/binomial.h"
+#include "binomial.h"
 
 using namespace std;
 
