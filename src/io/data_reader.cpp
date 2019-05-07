@@ -135,11 +135,12 @@ vector<double> explode_to_float(const string &s, const char &c)
 
     for(auto n:s)
     {
-        if(n != c) buff+=n; else
+        if(n != c) {buff+=n;} else
         if(n == c && buff != "") { v.push_back(atof(buff.c_str())); buff = ""; }
     }
-    if(buff != "") v.push_back(atof(buff.c_str()));
-
+    if(buff != "") {
+        v.push_back(atof(buff.c_str()));
+    }
     return v;
 }
 
@@ -248,6 +249,7 @@ vector<vector<double>> loadtxt_v2(string filename, const vector<int>& usecols,
     string line;
     unsigned r{};
     while (getline(fin, line)){
+//        cout << "line " << line << endl;
         if(r < skiprows){
             ++r;
             continue;
@@ -263,7 +265,7 @@ vector<vector<double>> loadtxt_v2(string filename, const vector<int>& usecols,
             if(c < tmp.size()) {
                 filtered.push_back(tmp[c]);
             } else{
-                cout << "column not found or delimiter is not correct : line " << __LINE__ << endl;
+//                cout << "column not found or delimiter is not correct : line " << __LINE__ << endl;
             }
         }
         data.push_back(filtered);
@@ -340,6 +342,104 @@ string output_header_json(
     }
 
     return oss.str();
+}
+
+/**
+ * Analyze delimiter from the first row of data.
+ * @param in_filename : name of the file
+ * @param skiprows    : number of lines to skip
+ * @param delimiter   : delimiter character
+ * @return delimiter that is ueed
+ */
+char analyze_delimeter(std::string in_filename, int skiprows, char delimiter, char comment){
+
+    ifstream fin(in_filename);
+
+    vector<double> tmp, filtered;
+    string line;
+    unsigned r{};
+    // get the first row of data
+    while (getline(fin, line)) {
+//        cout << "line " << line << endl;
+        if (r < skiprows) {
+            ++r;
+            continue;
+        }
+        if (line[0] == comment) {
+            continue;
+        }
+        break; // first line of the data
+    }
+
+
+    std::size_t found = line.find(delimiter);
+    if (found!=std::string::npos) {
+        std::cout << "delimiter matched" << found << '\n';
+    }else{
+        std::cout << "delimiter mismatched. finding used delimiter" << '\n';
+        string delimiter_list = " ,\t\v"; // list of delimiters
+        for(auto n:line)
+        {
+            for(auto c: delimiter_list){
+                if(n == c){
+                    cout << "found delimiter is " << int(n) << endl;
+                    delimiter = c;
+                }
+            }
+        }
+    }
+
+
+    return delimiter;
+}
+
+
+/**
+ * Analyze delimiter from the first row of data.
+ * Any non numeric character that is encountered first will be used as a delimiter.
+ * @param in_filename : name of the file
+ * @param skiprows    : number of lines to skip
+ * @param delimiter   : delimiter character
+ * @return delimiter that is ueed
+ */
+char analyze_delimeter_non_numeric(std::string in_filename, int skiprows, char delimiter, char comment){
+
+    ifstream fin(in_filename);
+
+    vector<double> tmp, filtered;
+    string line;
+    unsigned r{};
+    // get the first row of data
+    while (getline(fin, line)) {
+//        cout << "line " << line << endl;
+        if (r < skiprows) {
+            ++r;
+            continue;
+        }
+        if (line[0] == comment) {
+            continue;
+        }
+        break; // first line of the data
+    }
+
+
+    std::size_t found = line.find(delimiter);
+    if (found!=std::string::npos) {
+        std::cout << "delimiter matched" << found << '\n';
+    }else{
+        std::cout << "delimiter mismatched. finding used delimiter" << '\n';
+        string delimiter_list = " ,\t\v"; // list of delimiters
+        for(auto n:line)
+        {
+            if(isdigit(n))            continue; // number
+            if(n == '.')              continue; // decimel point
+            delimiter = n;
+            break;
+        }
+    }
+
+
+    return delimiter;
 }
 
 

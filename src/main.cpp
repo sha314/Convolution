@@ -335,6 +335,12 @@ void cmd_args(int argc, char* argv[]){
                 ++i;
                 if(i < argc) {
                     delimeter = argv[i][0];
+                    cout << "delimeter provided " << int(delimeter) << endl;
+//                    cout << "valid delimiter list " << endl;
+//                    cout << "delimiter space = int() " << int(' ') << endl;
+//                    cout << "delimiter horizontal tab = int(\\t) " << int('\t') << endl;
+//                    cout << "delimiter vertical tab = int(\\v) " << int('\v') << endl;
+//                    cout << "delimiter comma= int(,) " << int(',') << endl;
                 }
                 ++i;
                 break;
@@ -426,6 +432,8 @@ void cmd_args(int argc, char* argv[]){
         exit(1);
     }
 //    view(b_usecols);
+
+    delimeter = analyze_delimeter(in_filename, skiprows, delimeter);
     vector<vector<double>> b_data_in = loadtxt_v2(in_filename, b_usecols, skiprows, delimeter);
     vector<vector<double>> a_data;
     if(a_usecols.empty()){
