@@ -1,5 +1,6 @@
 ./test-python-api
 .idea
+.idea/
 *.so
 *.py
 *.iml

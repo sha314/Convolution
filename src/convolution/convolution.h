@@ -9,6 +9,13 @@
 #include <cstddef>
 #include <iostream>
 
+
+/**
+ * Combitable with OpenMP and OpenACC. Flags must be provided during compiletime
+ */
+std::vector<double> convolve_1d(std::vector<double>& data_in, int thread_count=1);
+std::vector<std::vector<double>> convolve_2d(std::vector<std::vector<double>> &data_in, int thread_count=1);
+
 /**
  * A Class to make using convolution user friendly
  */
