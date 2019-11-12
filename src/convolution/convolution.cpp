@@ -922,3 +922,162 @@ std::vector<std::vector<double>> convolve_2d(std::vector<std::vector<double>> &d
     return data_out;
 
 }
+
+
+std::vector<double> convolve_1d_fast(std::vector<double> &data_in, int thread_count) {
+    size_t N = data_in.size();
+
+    std::vector<double> _forward_factor(N);
+    std::vector<double> _backward_factor(N);
+
+    for (size_t i=0; i < N; ++i)
+    {
+        _forward_factor[i]  = (double) (N - i + 1) / i;
+        _backward_factor[i] = (double) (i + 1) / (N - i);
+    }
+
+    vector<double> data_out(N);
+    auto t0 = chrono::system_clock::now();
+    long step = N / 1000;
+    // entering parallel region
+#ifdef _OPENACC
+    #pragma acc data copy(data_out[0:_number_of_data]) copyin(_forward_factor[0:_number_of_data],_backward_factor[0:_number_of_data],d[0:_number_of_data])
+#pragma acc parallel loop independent
+#else
+#pragma omp parallel for schedule(dynamic) num_threads(thread_count)
+#endif
+    for (long j=0; j <N; ++j)
+    {
+        double prob     = (double) j / N;
+        double factor   = 0;
+        double binom    = 0;
+        double prev     = 0;
+        double binomNormalization_const = 1;
+        double sum      = data_in[j];
+
+        // forward iteraion part
+        factor = prob / (1-prob);
+        prev   = 1;
+
+        for (long i=j+1; i<N; ++i)
+        {
+            binom     = prev * _forward_factor[i] * factor;
+            binomNormalization_const += binom;
+            sum      += data_in[i] * binom;
+            prev      = binom;
+        }
+
+        // backward iteration part
+        factor = (1-prob)/prob;
+        prev   = 1;
+
+        for (long i=j-1; i>=0; --i)
+        {
+            binom     = prev * _backward_factor[i] * factor;
+            binomNormalization_const += binom;
+            sum      += data_in[i] * binom;
+            prev      = binom;
+        }
+
+        // normalizing data
+        data_out[j] = sum / binomNormalization_const;
+        if(j % step == 0) {
+            cout << "\33[2K"; // erase the current line
+            cout << '\r'; // return the cursor to the start of the line
+//            cout << "row " << j << " ";
+            cout << "progress " << j * 100 / double(N) << " %";
+            std::fflush(stdout);
+        }
+
+    }
+
+    return data_out;
+}
+
+std::vector<std::vector<double>> convolve_2d_fast(std::vector<std::vector<double>> &data_in, int thread_count) {
+    size_t n_columns = data_in[0].size(); // number of columns
+    size_t n_rows = data_in.size(); // number of rows
+
+//    cout << "rows " << n_rows << endl;
+//    cout << "cols " << n_columns << endl;
+
+    std::vector<double> _forward_factor(n_rows);
+    std::vector<double> _backward_factor(n_rows);
+
+    for (size_t i=0; i < n_rows; ++i)
+    {
+        _forward_factor[i]  = (double) (n_rows - i + 1) / i;
+        _backward_factor[i] = (double) (i + 1) / (n_rows - i);
+    }
+
+    vector<vector<double>> data_out(n_rows);
+
+
+    // entering parallel region
+    cout << endl;
+    long step = n_rows / 1000 + 1;
+
+#ifdef _OPENACC
+    #pragma acc data copy(data_out[0:_number_of_data]) copyin(_forward_factor[0:_number_of_data],_backward_factor[0:_number_of_data],d[0:_number_of_data])
+#pragma acc parallel loop independent
+#else
+#pragma omp parallel for schedule(dynamic) num_threads(thread_count)
+#endif
+    for (long row=0; row < n_rows; ++row){
+//        cout << "Threads " << omp_get_num_threads() << endl;
+        data_out[row].resize(n_columns); // space for columns
+        double prob     = (double) row / n_rows;
+        double factor   = 0;
+        double binom    = 0;
+        double prev     = 0;
+        double binomNormalization_const = 1;
+
+        vector<double> sum(n_columns);
+        for(size_t k{}; k < n_columns; ++k){
+            sum[k] = data_in[row][k];
+        }
+
+
+        // forward iteration part
+        factor = prob / (1-prob);
+        prev   = 1;
+
+        for (long i=row+1; i < n_rows; ++i)
+        {
+            binom     = prev * _forward_factor[i] * factor;
+            binomNormalization_const += binom;
+            for(size_t j{}; j < n_columns; ++j){
+                sum[j] += data_in[i][j] * binom;
+            }
+            prev      = binom;
+        }
+        // backward iteration part
+        factor = (1-prob)/prob;
+        prev   = 1;
+
+        for (long i=row-1; i>=0; --i)
+        {
+            binom     = prev * _backward_factor[i] * factor;
+            binomNormalization_const += binom;
+            for(size_t j{}; j < n_columns; ++j){
+                sum[j] += data_in[i][j] * binom;
+            }
+            prev      = binom;
+        }
+        // normalizing data
+        for(size_t j{}; j < n_columns; ++j){
+            data_out[row][j] = sum[j] / binomNormalization_const;
+        }
+        if(row % step == 0) {
+            cout << "\33[2K"; // erase the current line
+            cout << '\r'; // return the cursor to the start of the line
+            cout << "progress " << row * 100 / double(n_rows) << " %";
+            std::fflush(stdout);
+        }
+
+    }
+
+    cout << endl;
+    return data_out;
+
+}

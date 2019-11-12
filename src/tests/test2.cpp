@@ -5,6 +5,7 @@
 #include <fstream>
 #include "test2.h"
 #include "../io/data_reader.h"
+#include "../convolution/convolution.h"
 
 std::vector<double> factorials(size_t N){
     std::vector<double> fact(N+1);
@@ -170,6 +171,18 @@ void test2_convolution(){
     auto b_data_out = convolution_v2(b_data_in);
     ofstream fout(filename+"_convoluted.txt");
     for(size_t i{}; i < b_data_in.size(); ++i){
+        fout << a[i] << '\t' << b_data_out[i] << endl;
+    }
+    fout.close();
+}
+
+void test3_convolution(){
+    string filename="data_json.txt";
+    vector<double> a(10000);
+
+    auto b_data_out = convolve_1d_fast(a);
+    ofstream fout(filename+"_convoluted.txt");
+    for(size_t i{}; i < b_data_out.size(); ++i){
         fout << a[i] << '\t' << b_data_out[i] << endl;
     }
     fout.close();
