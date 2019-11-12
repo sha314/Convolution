@@ -353,7 +353,9 @@ string output_header_json(
  */
 char analyze_delimeter(std::string in_filename, int skiprows, char delimiter, char comment){
 
-    ifstream fin(in_filename);
+    ifstream fin;
+    fin.open(in_filename);
+    if(!fin) throw std::runtime_error("Could not find/open file");
 
     vector<double> tmp, filtered;
     string line;

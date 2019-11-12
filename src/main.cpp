@@ -424,7 +424,7 @@ int cmd_args_v2(int argc, char** argv){
     int flg;
     int f_precision{10};
     int n_threads{1};
-
+    double threshold{};
 
     try
     {
@@ -434,11 +434,11 @@ int cmd_args_v2(int argc, char** argv){
         po::options_description desc("Options");
         desc.add_options()
                 ("help,h", "Print help messages")
-                ("without,a",po::value<vector<int>>(&b_usecols), "columns that we want in the output file without performing convolution.\nNo default value.")
-                ("with,b",po::value<vector<int>>(&b_usecols)->required(), "columns that we want in the output file with performing convolution.")
-                ("copy,c", "If provided the header and comment from the input file will be written\n"
-                        "                             without modification to the output file. Header is the first line of the\n"
-                        "                             input file.")
+                ("without,a", po::value<vector<int>>(&a_usecols)->multitoken()->composing(), "columns that we want in the output file without performing convolution.\nNo default value.")
+                ("with,b",po::value<vector<int>>(&b_usecols)->required()->multitoken()->composing(),"columns that we want in the output file with performing convolution.")
+                ("copy,c",po::value<bool>(&write_header_and_comment)->default_value(true),
+                        "If provided the header and comment from the input file will be written "
+                        "without modification to the output file. Header is the first line of the input file.")
                 ("delimiter,d",po::value<char>()->default_value(' '), "Delimiter to use. Default value is ' '.")
                 ("in",po::value<string>(&in_filename)->required(), "name of the input file that we want to convolve")
                 ("out",po::value<string>(&out_filename), "name of the output file. "
@@ -450,57 +450,24 @@ int cmd_args_v2(int argc, char** argv){
                 ("version,v",po::value<int>()->notifier(&version_notified), "Info to write as comment in the output file")
                 ("skip",po::value<int>(&skiprows)->default_value(0), "Number of rows to skip from the input file. Default value is 0.")
                 ("write,w",po::value<bool>(&write_input_data)->default_value(false),"If provided input b data will be written to the output file.")
-        ;
+                ("threshold",po::value<double>(&threshold)->default_value(1e-9),"If weight factor that multiplies input data at each iteration is less than\n"
+                        " `threshold` then break that loop. Program performs way faster in this way.");
 
-        cout << __LINE__ << endl;
+//        cout << __LINE__ << endl;
         po::variables_map vm;
         try   {
             po::store(po::parse_command_line(argc, argv, desc), vm); // can throw
-            po::notify(vm); // throws on error, so do after help in case
             // there are any problems
+            po::notify(vm); // throws on error, so do after help in case
             /** --help option
              */
-            if ( vm.count("help")  ) {
+            if (vm.count("help")) {
                 std::cout << "Convolution app" << std::endl
                           << desc << std::endl;
-                return SUCCESS;
+                cout << "A line that begins with '#' is considered a commented line." << endl;
+//                return SUCCESS;
             }
-            if(vm.count("without")){
-                cout << "Pi: " << vm["pi"].as<float>() << endl;
-            }
-            if(vm.count("with")){
-                cout << "Pi: " << vm["pi"].as<float>() << endl;
-            }
-            if(vm.count("copy")){
-                cout << "Pi: " << vm["pi"].as<float>() << endl;
-            }
-            if(vm.count("delimiter")){
-                cout << "Pi: " << vm["pi"].as<float>() << endl;
-            }
-            if(vm.count("in")){
-                cout << "Pi: " << vm["pi"].as<float>() << endl;
-            }
-            if(vm.count("out")){
-                cout << "Pi: " << vm["pi"].as<float>() << endl;
-            }
-            if(vm.count("info")){
-                cout << "Pi: " << vm["pi"].as<float>() << endl;
-            }
-            if(vm.count("precision")){
-                cout << "Pi: " << vm["pi"].as<float>() << endl;
-            }
-            if(vm.count("threads")){
-                cout << "Pi: " << vm["pi"].as<float>() << endl;
-            }
-            if(vm.count("version")){
-                cout << "Pi: " << vm["pi"].as<float>() << endl;
-            }
-            if(vm.count("skip")){
-                cout << "Pi: " << vm["pi"].as<float>() << endl;
-            }
-            if(vm.count("write")){
-                cout << "Pi: " << vm["pi"].as<float>() << endl;
-            }
+
             cout << __LINE__ << endl;
 
         }
@@ -511,7 +478,7 @@ int cmd_args_v2(int argc, char** argv){
             cout << __LINE__ << endl;
             return ERROR_IN_COMMAND_LINE;
         }
-
+        catch (...) { cout << "default exception"; }
         // application code here //
 
     }
@@ -522,23 +489,36 @@ int cmd_args_v2(int argc, char** argv){
         return ERROR_UNHANDLED_EXCEPTION;
 
     }
-
-//    print_vector(a_usecols);
-//    print_vector(a_names);
-//    print_vector(b_usecols);
-//    print_vector(b_names);
+    catch (...) { cout << "default exception"; }
 
     if(out_filename.empty()){
         out_filename = in_filename + out_file_flag;
     }
+    /*******
+     * checking provided arguments
+     * *****/
 
-    // reading input file
-    if(b_usecols.empty()){
-        cerr << "no specified columns" << endl;
-        exit(1);
-    }
-//    view(b_usecols);
+    cout << __LINE__ << endl;
+    cout << "in_filename " << in_filename << endl;
+    cout << "out_filename " << out_filename << endl;
+    cout << "out_file_flag " << out_file_flag << endl;
+    cout << "header_line " << header_line << endl;
+    cout << "test_size " << test_size << endl;
+    print_vector(a_usecols);
+    print_vector(a_names);
+    print_vector(b_usecols);
+    print_vector(b_names);
+    cout << "info " << info << endl;
+    cout << "write_header_and_comment " << write_header_and_comment << endl;
+    cout << "skiprows " << skiprows << endl;
+    cout << "delimiter " << delimeter << endl;
+    cout << "write_input_data " << write_input_data << endl;
+    cout << "flg " <<  flg << endl;
+    cout << "f_precision " << f_precision << endl;
+    cout << "n_threads " << n_threads << endl;
+    cout << "threshold " << threshold << endl;
 
+    cout << __LINE__ << endl;
     delimeter = analyze_delimeter(in_filename, skiprows, delimeter);
     vector<vector<double>> b_data_in = loadtxt_v2(in_filename, b_usecols, skiprows, delimeter);
     vector<vector<double>> a_data;
@@ -559,10 +539,7 @@ int cmd_args_v2(int argc, char** argv){
     }
 //    view_matrix(b_data_in);
     // performing convolution
-    Convolution conv(n_threads);
-    vector<vector<double>> b_data_out = conv.run_multi_omp(b_data_in);
-//    vector<vector<double>> b_data_out = conv.run_multi_omp_v2(b_data_in);
-    conv.timeElapsed();
+    vector<vector<double>> b_data_out = convolve_2d_fast(b_data_in, n_threads, threshold);
 
     // writing output to file
     savetxt_multi(in_filename,
@@ -649,10 +626,10 @@ int main(int argc, char* argv[]) {
     auto t0 = std::chrono::system_clock::now();
 
 //    cmd_args(argc, argv);
-//    cmd_args_v2(argc, argv);
+    cmd_args_v2(argc, argv);
 //    test1_convolution();
 //    test2_convolution();
-      test3_convolution();
+//      test3_convolution();
 
     auto t1 = std::chrono::system_clock::now();
 
