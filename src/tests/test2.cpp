@@ -178,12 +178,12 @@ void test2_convolution(){
 
 void test3_convolution(){
     string filename="data_json.txt";
-    vector<double> a(10000);
+    vector<double> a(1000000, 1);
 
-    auto b_data_out = convolve_1d_fast(a);
-    ofstream fout(filename+"_convoluted.txt");
-    for(size_t i{}; i < b_data_out.size(); ++i){
-        fout << a[i] << '\t' << b_data_out[i] << endl;
-    }
-    fout.close();
+    auto b_data_out = convolve_1d_fast(a, 1);
+//    ofstream fout(filename+"_convoluted.txt");
+//    for(size_t i{}; i < b_data_out.size(); ++i){
+//        fout << a[i] << '\t' << b_data_out[i] << endl;
+//    }
+//    fout.close();
 }

@@ -923,8 +923,19 @@ std::vector<std::vector<double>> convolve_2d(std::vector<std::vector<double>> &d
 
 }
 
-
-std::vector<double> convolve_1d_fast(std::vector<double> &data_in, int thread_count) {
+/**
+ * If weight factor that multiplies input data at each iteration is less than
+ * `threshold` then break that loop. This way program performs way faster,
+ * e.g. input data of size 1,000,000 takes about 20 sec with a single thread
+ * for the default value of `threshold`
+ * @param data_in  : input data as 1 D vector array
+ * @param thread_count : number of threads to use
+ * @param threshold   : threshold value for loop termination. default value is 1e-9
+ * @return
+ */
+std::vector<double> convolve_1d_fast(
+        std::vector<double> &data_in, int thread_count, double threshold
+) {
     size_t N = data_in.size();
 
     std::vector<double> _forward_factor(N);
@@ -965,6 +976,12 @@ std::vector<double> convolve_1d_fast(std::vector<double> &data_in, int thread_co
             binomNormalization_const += binom;
             sum      += data_in[i] * binom;
             prev      = binom;
+            if(binom < threshold){
+                // contribution of the next values will be negligible compared to the previous values
+//                cout << "i=" << i << " binom =" << binom << endl;
+//                exit(0);
+                break;
+            }
         }
 
         // backward iteration part
@@ -977,6 +994,12 @@ std::vector<double> convolve_1d_fast(std::vector<double> &data_in, int thread_co
             binomNormalization_const += binom;
             sum      += data_in[i] * binom;
             prev      = binom;
+            if(binom < threshold){
+                // contribution of the next values will be negligible compared to the previous values
+//                cout << "i=" << i << " binom =" << binom << endl;
+//                exit(0);
+                break;
+            }
         }
 
         // normalizing data
@@ -994,7 +1017,9 @@ std::vector<double> convolve_1d_fast(std::vector<double> &data_in, int thread_co
     return data_out;
 }
 
-std::vector<std::vector<double>> convolve_2d_fast(std::vector<std::vector<double>> &data_in, int thread_count) {
+std::vector<std::vector<double>> convolve_2d_fast(
+        std::vector<std::vector<double>> &data_in, int thread_count, double threshold
+) {
     size_t n_columns = data_in[0].size(); // number of columns
     size_t n_rows = data_in.size(); // number of rows
 
@@ -1050,6 +1075,12 @@ std::vector<std::vector<double>> convolve_2d_fast(std::vector<std::vector<double
                 sum[j] += data_in[i][j] * binom;
             }
             prev      = binom;
+            if(binom < threshold){
+                // contribution of the next values will be negligible compared to the previous values
+//                cout << "i=" << i << " binom =" << binom << endl;
+//                exit(0);
+                break;
+            }
         }
         // backward iteration part
         factor = (1-prob)/prob;
@@ -1063,6 +1094,12 @@ std::vector<std::vector<double>> convolve_2d_fast(std::vector<std::vector<double
                 sum[j] += data_in[i][j] * binom;
             }
             prev      = binom;
+            if(binom < threshold){
+                // contribution of the next values will be negligible compared to the previous values
+//                cout << "i=" << i << " binom =" << binom << endl;
+//                exit(0);
+                break;
+            }
         }
         // normalizing data
         for(size_t j{}; j < n_columns; ++j){

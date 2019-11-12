@@ -410,6 +410,21 @@ void on_age(int age)
 
 int cmd_args_v2(int argc, char** argv){
     string in_filename;
+    string out_filename;
+    string out_file_flag = "_convoluted.txt";
+    int header_line{0};
+    size_t test_size{0};
+    vector<int> a_usecols, b_usecols; // b_usecols will be convolved and a_usecols will remain unchanged
+    vector<string> a_names, b_names;
+    string info;
+    bool write_header_and_comment{false};
+    int skiprows{0};
+    char delimeter{' '};
+    bool write_input_data {false};
+    int flg;
+    int f_precision{10};
+    int n_threads{1};
+
 
     try
     {
@@ -419,22 +434,22 @@ int cmd_args_v2(int argc, char** argv){
         po::options_description desc("Options");
         desc.add_options()
                 ("help,h", "Print help messages")
-                ("without,a", "columns that we want in the output file without performing convolution.\nNo default value.")
-                ("with,b", "columns that we want in the output file with performing convolution.")
+                ("without,a",po::value<vector<int>>(&b_usecols), "columns that we want in the output file without performing convolution.\nNo default value.")
+                ("with,b",po::value<vector<int>>(&b_usecols)->required(), "columns that we want in the output file with performing convolution.")
                 ("copy,c", "If provided the header and comment from the input file will be written\n"
                         "                             without modification to the output file. Header is the first line of the\n"
                         "                             input file.")
                 ("delimiter,d",po::value<char>()->default_value(' '), "Delimiter to use. Default value is ' '.")
                 ("in",po::value<string>(&in_filename)->required(), "name of the input file that we want to convolve")
-                ("out", "name of the output file. "
+                ("out",po::value<string>(&out_filename), "name of the output file. "
                         "If not provided the string \'_convoluted.txt\' "
                         "will be appended to the input file.")
-                ("info,i","Info to write as comment in the output file")
-                ("precision,p",po::value<int>()->default_value(10), "Info to write as comment in the output file")
-                ("threads,t",po::value<int>()->default_value(1), "Info to write as comment in the output file")
+                ("info,i",po::value<string>(&info),"Info to write as comment in the output file")
+                ("precision,p",po::value<int>(&f_precision)->default_value(10), "Info to write as comment in the output file")
+                ("threads,t",po::value<int>(&n_threads)->default_value(1), "Info to write as comment in the output file")
                 ("version,v",po::value<int>()->notifier(&version_notified), "Info to write as comment in the output file")
-                ("skip",po::value<int>()->default_value(0), "Number of rows to skip from the input file. Default value is 0.")
-                ("write,w",po::value<bool>()->default_value(false),"If provided input b data will be written to the output file.")
+                ("skip",po::value<int>(&skiprows)->default_value(0), "Number of rows to skip from the input file. Default value is 0.")
+                ("write,w",po::value<bool>(&write_input_data)->default_value(false),"If provided input b data will be written to the output file.")
         ;
 
         cout << __LINE__ << endl;
@@ -446,9 +461,8 @@ int cmd_args_v2(int argc, char** argv){
             /** --help option
              */
             if ( vm.count("help")  ) {
-                std::cout << "Basic Command Line Parameter App" << std::endl
+                std::cout << "Convolution app" << std::endl
                           << desc << std::endl;
-                cout << __LINE__ << endl;
                 return SUCCESS;
             }
             if(vm.count("without")){
@@ -509,22 +523,6 @@ int cmd_args_v2(int argc, char** argv){
 
     }
 
-    cout << "Arguments" << endl;
-    string out_filename;
-    string out_file_flag = "_convoluted.txt";
-    int header_line{0};
-    size_t test_size{0};
-    vector<int> a_usecols, b_usecols; // b_usecols will be convolved and a_usecols will remain unchanged
-    vector<string> a_names, b_names;
-    string info;
-    bool write_header_and_comment{false};
-    int skiprows{0};
-    char delimeter{' '};
-    bool write_input_data {false};
-    int flg;
-    int f_precision{10};
-    int n_threads{-1};
-
 //    print_vector(a_usecols);
 //    print_vector(a_names);
 //    print_vector(b_usecols);
@@ -577,7 +575,7 @@ int cmd_args_v2(int argc, char** argv){
                   b_data_in,
                   b_data_out,
                   f_precision);
-
+    return 0;
 }
 
 void get_option_b(int argc, char *const *argv, vector<int> &b_usecols, vector<string> &b_names, int i) {
@@ -651,10 +649,10 @@ int main(int argc, char* argv[]) {
     auto t0 = std::chrono::system_clock::now();
 
 //    cmd_args(argc, argv);
-    cmd_args_v2(argc, argv);
+//    cmd_args_v2(argc, argv);
 //    test1_convolution();
 //    test2_convolution();
-//      test3_convolution();
+      test3_convolution();
 
     auto t1 = std::chrono::system_clock::now();
 
