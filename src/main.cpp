@@ -425,6 +425,7 @@ int cmd_args_v2(int argc, char** argv){
     int f_precision{10};
     int n_threads{1};
     double threshold{};
+    int times{1};
 
     try
     {
@@ -451,7 +452,8 @@ int cmd_args_v2(int argc, char** argv){
                 ("skip",po::value<int>(&skiprows)->default_value(0), "Number of rows to skip from the input file. Default value is 0.")
                 ("write,w",po::value<bool>(&write_input_data)->default_value(false),"If provided input b data will be written to the output file.")
                 ("threshold",po::value<double>(&threshold)->default_value(1e-9),"If weight factor that multiplies input data at each iteration is less than\n"
-                        " `threshold` then break that loop. Program performs way faster in this way.");
+                        " `threshold` then break that loop. Program performs way faster in this way.")
+                ("times",po::value<int>(&times)->default_value(1),"Number of times to perform convolution.");
 
 //        cout << __LINE__ << endl;
         po::variables_map vm;
@@ -517,6 +519,7 @@ int cmd_args_v2(int argc, char** argv){
     cout << "f_precision " << f_precision << endl;
     cout << "n_threads " << n_threads << endl;
     cout << "threshold " << threshold << endl;
+    cout << "times " << times << endl;
 
     cout << __LINE__ << endl;
     delimeter = analyze_delimeter(in_filename, skiprows, delimeter);
@@ -538,8 +541,16 @@ int cmd_args_v2(int argc, char** argv){
         a_data = loadtxt_v2(in_filename, a_usecols, skiprows, delimeter);
     }
 //    view_matrix(b_data_in);
-    // performing convolution
+    // performing convolution once
     vector<vector<double>> b_data_out = convolve_2d_fast(b_data_in, n_threads, threshold);
+
+    // for multiple convolution
+//    auto tmp = b_data_in;
+//    vector<vector<double>> b_data_out;
+//    for(int i{}; i < times; ++i){
+//        b_data_out = convolve_2d_fast(tmp, n_threads, threshold);
+//        tmp = b_data_out;
+//    }
 
     // writing output to file
     savetxt_multi(in_filename,
