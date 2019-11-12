@@ -38,7 +38,7 @@ savetxt_multi(
         fin.close();
     }
     fout << '#' << info << endl; // info cannot contain a new line character
-    fout << "#convoluted data" << endl;
+    fout << "#convolved data" << endl;
     cout << b_data_out.size() << ", " << b_data_out[0].size() << endl;
 
     for(size_t i{}; i < b_data_in.size(); ++i){
@@ -50,6 +50,7 @@ savetxt_multi(
                 fout << delimeter << setprecision(precision) << b_data_in[i][j];
             }
             fout << delimeter << setprecision(precision) << b_data_out[i][j];
+//            cout << delimeter << setprecision(precision) << b_data_out[i][j];
         }
         fout << endl;
     }
