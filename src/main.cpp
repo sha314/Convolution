@@ -542,7 +542,9 @@ int cmd_args_v2(int argc, char** argv){
     }
 //    view_matrix(b_data_in);
     // performing convolution once
+//    vector<vector<double>> b_data_out = convolve_2d(b_data_in, n_threads);
     vector<vector<double>> b_data_out = convolve_2d_fast(b_data_in, n_threads, threshold);
+
 
     // for multiple convolution
 //    auto tmp = b_data_in;

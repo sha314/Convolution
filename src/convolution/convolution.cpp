@@ -799,27 +799,29 @@ std::vector<double> convolve_1d(std::vector<double> &data_in, int thread_count) 
         // forward iteraion part
         factor = prob / (1-prob);
         prev   = 1;
-
+//        cout << "{";
         for (long i=j+1; i<N; ++i)
         {
             binom     = prev * _forward_factor[i] * factor;
             binomNormalization_const += binom;
             sum      += data_in[i] * binom;
             prev      = binom;
+//            cout << binom << ", ";
         }
-
+//        cout << "}" << endl;
         // backward iteration part
         factor = (1-prob)/prob;
         prev   = 1;
-
+//        cout << "{";
         for (long i=j-1; i>=0; --i)
         {
             binom     = prev * _backward_factor[i] * factor;
             binomNormalization_const += binom;
             sum      += data_in[i] * binom;
             prev      = binom;
+//            cout << binom << ", ";
         }
-
+//        cout << "}" << endl;
         // normalizing data
         data_out[j] = sum / binomNormalization_const;
         if(j % step == 0) {
@@ -977,6 +979,8 @@ std::vector<double> convolve_1d_fast(
             sum      += data_in[i] * binom;
             prev      = binom;
             if(binom < threshold){
+                // whatever the initial valu of binom is it always decreases as loop iterates
+                // and reaches `threshold` very fast. Therefore
                 // contribution of the next values will be negligible compared to the previous values
 //                cout << "i=" << i << " binom =" << binom << endl;
 //                exit(0);
@@ -995,6 +999,8 @@ std::vector<double> convolve_1d_fast(
             sum      += data_in[i] * binom;
             prev      = binom;
             if(binom < threshold){
+                // whatever the initial valu of binom is it always decreases as loop iterates
+                // and reaches `threshold` very fast. Therefore
                 // contribution of the next values will be negligible compared to the previous values
 //                cout << "i=" << i << " binom =" << binom << endl;
 //                exit(0);
@@ -1076,6 +1082,8 @@ std::vector<std::vector<double>> convolve_2d_fast(
             }
             prev      = binom;
             if(binom < threshold){
+                // whatever the initial valu of binom is it always decreases as loop iterates
+                // and reaches `threshold` very fast. Therefore
                 // contribution of the next values will be negligible compared to the previous values
 //                cout << "i=" << i << " binom =" << binom << endl;
 //                exit(0);
@@ -1095,6 +1103,8 @@ std::vector<std::vector<double>> convolve_2d_fast(
             }
             prev      = binom;
             if(binom < threshold){
+                // whatever the initial valu of binom is it always decreases as loop iterates
+                // and reaches `threshold` very fast. Therefore
                 // contribution of the next values will be negligible compared to the previous values
 //                cout << "i=" << i << " binom =" << binom << endl;
 //                exit(0);
