@@ -43,14 +43,14 @@ savetxt_multi(
 
     for(size_t i{}; i < b_data_in.size(); ++i){
         for(size_t j{}; j < a_data[0].size(); ++j){
-            fout << setprecision(precision) << a_data[i][j];
+            fout << setprecision(precision) << a_data[i][j] << delimeter;
         }
         for(size_t j{}; j < b_data_in[0].size(); ++j){
             if(write_input_data){
-                fout << delimeter << setprecision(precision) << b_data_in[i][j];
+                fout << setprecision(precision) << b_data_in[i][j] << delimeter;
             }
-            fout << delimeter << setprecision(precision) << b_data_out[i][j];
-//            cout << delimeter << setprecision(precision) << b_data_out[i][j];
+            fout << setprecision(precision) << b_data_out[i][j] << delimeter;
+//            cout << setprecision(precision) << b_data_out[i][j] << delimeter;
         }
         fout << endl;
     }
