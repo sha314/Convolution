@@ -26,6 +26,21 @@ std::vector<std::vector<double>> convolve_2d_fast(
         int thread_count=1,
         double threshold=1e-9);
 
+/***
+ * Perform derivative along with convolution
+ * **/
+double D_1i(long i, size_t N, double p); // first derivative coefficient
+double D_2i(long i, size_t N, double p); // second derivative coefficient
+
+std::vector<double> convolve_1d_fast_diff(
+        std::vector<double> &data_in,
+        int thread_count = 1, int diff = 1,
+        double threshold = 1e-15);
+
+std::vector<std::vector<double>> convolve_2d_fast_diff(
+        std::vector<std::vector<double>> &data_in,
+        int thread_count=1, int diff = 1,
+        double threshold=1e-15);
 /**
  * A Class to make using convolution user friendly
  */

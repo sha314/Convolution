@@ -178,13 +178,35 @@ void test2_convolution(){
 
 void test3_convolution(){
     string filename="data_json.txt";
-    vector<double> a(20, 1);
+    vector<double> a(1000000, 1);
 
-    auto b_data_out = convolve_1d_fast(a, 1);
+    auto b_data_out = convolve_1d_fast(a, 1, 1e-36);
 //    auto b_data_out = convolve_1d(a, 1);
 //    ofstream fout(filename+"_convoluted.txt");
 //    for(size_t i{}; i < b_data_out.size(); ++i){
 //        fout << a[i] << '\t' << b_data_out[i] << endl;
 //    }
 //    fout.close();
+}
+
+void test4_convolution(){
+    string filename="sq_lattice_site_percolation_periodic__400_2018.6.30_7.51.51.txt";
+    auto delimeter = analyze_delimeter(filename, 0, ' ');
+    auto a = loadtxt_v2(filename,{1,3}, 0, delimeter);
+    cout << a.size() << ", " << a[0].size() << endl;
+    cout << "line " << __LINE__ << endl;
+//    exit(0);
+    auto b_data_out = convolve_2d_fast_diff(a, 1, 2, 1e-15);
+//    auto b_data_out = convolve_1d(a, 1);
+    cout << b_data_out.size() << ", " << b_data_out[0].size() << endl;
+    ofstream fout(filename+"_convoluted.txt");
+    for(size_t i{}; i < b_data_out.size(); ++i){
+        for(size_t j{}; j < b_data_out[0].size(); ++j) {
+            fout << a[i][j] << '\t' << b_data_out[i][j] << '\t';
+//            cout << a[i][j] << '\t' << b_data_out[i][j] << '\t';
+        }
+        fout << endl;
+//        cout << endl;
+    }
+    fout.close();
 }

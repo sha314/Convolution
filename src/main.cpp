@@ -643,13 +643,18 @@ int main(int argc, char* argv[]) {
 //    test1_convolution();
 //    test2_convolution();
 //      test3_convolution();
+//    test4_convolution();
 
     auto t1 = std::chrono::system_clock::now();
 
     std::chrono::duration<double> elapsed_seconds = t1-t0;
     std::time_t end_time = std::chrono::system_clock::to_time_t(t1);
-
-
+#ifdef DEBUG_FLAG
+    cout << "flag DEBUG_FLAG is defined" << endl;
+#endif
+#ifdef UNIT_TEST
+    cout << "flag UNIT_TEST is defined" << endl;
+#endif
     cout << "Program finished at " << std::ctime(&end_time) << endl;
     cout << "Total Time elapsed " << elapsed_seconds.count()/60 << " minutes" << endl;
     return 0;

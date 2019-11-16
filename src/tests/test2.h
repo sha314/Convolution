@@ -67,5 +67,6 @@ std::vector<double> convolution_derivative(std::vector<double>& data_in);
  */
 void test2_convolution();
 void test3_convolution();
+void test4_convolution();
 
 #endif //CONVOLUTION_TEST2_H
