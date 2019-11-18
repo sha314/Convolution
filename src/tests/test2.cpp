@@ -191,12 +191,14 @@ void test3_convolution(){
 
 void test4_convolution(){
     string filename="sq_lattice_site_percolation_periodic__400_2018.6.30_7.51.51.txt";
+    filename ="sq_lattice_site_percolation_periodic_free-energy_L400_2019-11-13_205909.txt_convoluted.txt_derivative.txt";
+    filename="sq_lattice_site_percolation_periodic_free-energy_L400_2019-11-13_205909.txt_convoluted.txt_derivative.txt_convoluted.txt";
     auto delimeter = analyze_delimeter(filename, 0, ' ');
-    auto a = loadtxt_v2(filename,{1,3}, 0, delimeter);
+    auto a = loadtxt_v2(filename,{1}, 0, delimeter);
     cout << a.size() << ", " << a[0].size() << endl;
     cout << "line " << __LINE__ << endl;
 //    exit(0);
-    auto b_data_out = convolve_2d_fast_diff(a, 1, 2, 1e-15);
+    auto b_data_out = convolve_2d_fast_diff(a, 1, 1, 1e-15);
 //    auto b_data_out = convolve_1d(a, 1);
     cout << b_data_out.size() << ", " << b_data_out[0].size() << endl;
     ofstream fout(filename+"_convoluted.txt");

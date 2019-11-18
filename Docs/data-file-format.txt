@@ -1,0 +1,5 @@
+###input data file format
+1. All lines comments or information other than actual data must start with a '#'
+2. Lines containing data must not start with '#'
+3. Lines containing data must use same delimiter to separate different columns of data
+4.

@@ -7,8 +7,8 @@ set(CMAKE_CXX_STANDARD 14)
 #SET(CMAKE_CXX_FLAGS  "-pthread -fopenmp") # with Open MP
 #SET(CMAKE_CXX_FLAGS  "-pthread -fopenacc") # with Open ACC
 #SET(CMAKE_CXX_FLAGS  "-lboost_program_options") # for boost library
-#SET(CMAKE_CXX_FLAGS  "-Wall -pthread -fopenmp -lboost_program_options -D DEBUG_FLAG") # for boost library + Open MP + pthread
-SET(CMAKE_CXX_FLAGS  "-O3 -pthread -fopenmp -lboost_program_options") # for boost library + Open MP + pthread
+SET(CMAKE_CXX_FLAGS  "-Wall -pthread -fopenmp -lboost_program_options -D DEBUG_FLAG") # for boost library + Open MP + pthread
+#SET(CMAKE_CXX_FLAGS  "-O3 -pthread -fopenmp -lboost_program_options") # for boost library + Open MP + pthread
 set(SOURCE_FILES
         src/main.cpp
         src/convolution/binomial.cpp
@@ -27,6 +27,6 @@ set(SOURCE_FILES
         src/utype.cpp
         src/include/utype.h
         src/tests/test2.cpp
-        src/tests/test2.h)
+        src/tests/test2.h src/cmd_args.cpp src/cmd_args.h)
 
 add_executable(convolution ${SOURCE_FILES})
