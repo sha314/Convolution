@@ -653,11 +653,17 @@ int cmd_args_v3(int argc, char** argv){
             b_data_out = convolve_2d_fast(tmp, n_threads, threshold);
         }
         tmp = b_data_out;
+
+#ifdef DEBUG_FLAG
 //        cout << &tmp[0] << endl;
         for(size_t k{}; k < tmp[0].size(); ++k) {
-            cout << num_array::max(tmp, k) << delimiter;
+//            cout << num_array::max(tmp, k) << delimiter;
+            auto aaa = num_array::diff(tmp, k);
+            cout << num_array::max(aaa)*tmp.size() << delimiter;
         }
         cout << endl;
+#endif
+
     }
 
     // writing output to file

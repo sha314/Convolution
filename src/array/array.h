@@ -71,7 +71,27 @@ namespace num_array {
         }
         return index;
     }
-
+ /******************************
+ * Perform differentiation
+ *******************************/
+/**
+ * Differentiation of a single column
+ * @tparam T
+ * @param vec
+ * @param column
+ * @return
+ */
+    template<typename T>
+    std::vector<T> diff(const std::vector <std::vector<T>> &vec, size_t column){
+        T prev = vec[0][column];
+        std::vector<T> arr(vec.size()); // number of rows must be equal
+        for(size_t row{1}; row < vec.size(); ++row){
+            T now = vec[row][column];
+            arr[row] = now - prev;
+            prev = now; // replace old value
+        }
+        return arr;
+    }
 }
 
 #endif //CONVOLUTION_ARRAY_H
