@@ -10,6 +10,7 @@
 #include "convolution/convolution.h"
 #include "io/data_writer.h"
 #include "include/printer.h"
+#include "array/array.h"
 
 using namespace std;
 
@@ -645,12 +646,18 @@ int cmd_args_v3(int argc, char** argv){
     auto tmp = b_data_in;
     vector<vector<double>> b_data_out;
     for(int i{}; i < times; ++i){
+        cout << "convolution round " << (i+1) << endl;
         if(threshold == -1) {
-            b_data_out = convolve_2d(b_data_in, n_threads);
+            b_data_out = convolve_2d(tmp, n_threads);
         }else {
             b_data_out = convolve_2d_fast(tmp, n_threads, threshold);
         }
         tmp = b_data_out;
+//        cout << &tmp[0] << endl;
+        for(size_t k{}; k < tmp[0].size(); ++k) {
+            cout << num_array::max(tmp, k) << delimiter;
+        }
+        cout << endl;
     }
 
     // writing output to file
@@ -886,10 +893,16 @@ void parse_cmd_arg(int argc, char *const *argv, string &in_filename, string &out
             case str2int("-w"):
             case str2int("--write"):
                 write_input_data = true;
+                ++i;
                 break;
             case str2int("--times"):
                 ++i;
                 times = stoi(argv[i]);
+                ++i;
+                break;
+            case str2int("--threshold"):
+                ++i;
+                threshold = stod(argv[i]);
                 ++i;
                 break;
             default:
