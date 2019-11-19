@@ -5,7 +5,9 @@
 #include "cmd_args.h"
 #include "io/data_reader.h"
 #include <iostream>
+#ifdef USE_BOOST
 #include "boost/program_options.hpp"
+#endif
 #include "include/string_methods.h"
 #include "convolution/convolution.h"
 #include "io/data_writer.h"
@@ -378,7 +380,7 @@ int cmd_args_v2(int argc, char** argv){
     int n_threads{1};
     double threshold{};
     int times{1};
-
+#ifdef USE_BOOST
     try
     {
         /** Define and parse the program options
@@ -444,7 +446,9 @@ int cmd_args_v2(int argc, char** argv){
 
     }
     catch (...) { cout << "default exception"; }
-
+#else
+    cout << "boost is not defined or installed" << endl;
+#endif
     if(out_filename.empty()){
         out_filename = in_filename + out_file_flag;
     }
@@ -577,17 +581,18 @@ int cmd_args_v3(int argc, char** argv){
 
     int f_precision{10};
     int n_threads{1};
-    double threshold{};
+    double threshold{1e-15};
     int times{1};
 
-    parse_cmd_arg(argc, argv, in_filename, out_filename, a_usecols, b_usecols, info,
+#ifdef USE_BOOST
+    parse_cmd_arg_boost(argc, argv, in_filename, out_filename, a_usecols, b_usecols, info,
                         write_header_and_comment, skiprows, write_input_data, f_precision, n_threads,
                         threshold, times, delimiter);
-
-//    parse_cmd_arg_boost(argc, argv, in_filename, out_filename, a_usecols, b_usecols, info,
-//                        write_header_and_comment, skiprows, write_input_data, f_precision, n_threads,
-//                        threshold, times, delimiter);
-
+#else
+    parse_cmd_arg(argc, argv, in_filename, out_filename, a_usecols, b_usecols, info,
+                  write_header_and_comment, skiprows, write_input_data, f_precision, n_threads,
+                  threshold, times, delimiter);
+#endif
     if(out_filename.empty()){
 //        out_filename = in_filename + out_file_flag + ".txt";
         out_filename = in_filename + out_file_flag + "_" + to_string(times) + "times.txt";
@@ -596,6 +601,7 @@ int cmd_args_v3(int argc, char** argv){
      * checking provided arguments
      * *****/
 
+#ifdef DEBUG_FLAG
     cout << __LINE__ << endl;
     cout << "in_filename " << in_filename << endl;
     cout << "out_filename " << out_filename << endl;
@@ -615,8 +621,8 @@ int cmd_args_v3(int argc, char** argv){
     cout << "n_threads " << n_threads << endl;
     cout << "threshold " << threshold << endl;
     cout << "times " << times << endl;
-
     cout << __LINE__ << endl;
+#endif
     delimiter = analyze_delimeter(in_filename, skiprows, delimiter);
     vector<vector<double>> b_data_in = loadtxt_v2(in_filename, b_usecols, skiprows, delimiter);
     vector<vector<double>> a_data;
@@ -680,6 +686,7 @@ int cmd_args_v3(int argc, char** argv){
     return 0;
 }
 
+#ifdef USE_BOOST
 int parse_cmd_arg_boost(int argc, char *const *argv, string &in_filename, string &out_filename, vector<int> &a_usecols,
                          vector<int> &b_usecols, string &info, bool &write_header_and_comment, int &skiprows,
                          bool &write_input_data, int &f_precision, int &n_threads, double &threshold, int &times, char& delimiter) {
@@ -759,7 +766,11 @@ int parse_cmd_arg_boost(int argc, char *const *argv, string &in_filename, string
 
     }
     catch (...) { cout << "default exception"; }
+
+    cout << "Reached the end" << endl;
+    return 0;
 }
+#endif
 
 void parse_cmd_arg(int argc, char *const *argv, string &in_filename, string &out_filename, vector<int> &a_usecols,
                          vector<int> &b_usecols, string &info, bool &write_header_and_comment, int &skiprows,

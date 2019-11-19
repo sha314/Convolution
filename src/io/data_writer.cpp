@@ -32,7 +32,9 @@ savetxt_multi(
             if(isdigit(trimed[0])){
                 break;
             }
+#ifdef DEBUG_FLAG
             cout << str << endl;
+#endif
             fout << str << endl;
         }
         fin.close();

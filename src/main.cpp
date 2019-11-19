@@ -146,6 +146,10 @@ int main(int argc, char* argv[]) {
 #ifdef UNIT_TEST
     cout << "flag UNIT_TEST is defined" << endl;
 #endif
+#ifdef USE_BOOST
+    // if provided during compile time boost part will be selected for compilation
+    cout << "flag USE_BOOST is defined" << endl;
+#endif
     cout << "Program finished at " << std::ctime(&end_time) << endl;
     cout << "Total Time elapsed " << elapsed_seconds.count()/60 << " minutes" << endl;
     return 0;
