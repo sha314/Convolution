@@ -9,6 +9,8 @@
  * Writes log to a file
  */
 #include <fstream>
+#include <utility>
+#include <vector>
 
 /**
  Only one instance of Logging class is allowed. No new instance can be created.
@@ -37,14 +39,24 @@ public:
     }
 
     void setFilename(std::string filename){
-        _filename=filename;
+        _filename= std::move(filename);
         _fout.close();
         _fout.open(_filename);
     }
-    void addText(std::string text){
+    void addText(const std::string &text){
         _fout << text << std::endl;
     }
 
+    void addText(double text){
+        _fout << text << std::endl;
+    }
+
+    void addText(std::vector<double>& text){
+        for(auto a: text) {
+            _fout << a << "\t";
+        }
+        _fout << std::endl;
+    }
 
 };
 

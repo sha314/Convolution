@@ -825,6 +825,15 @@ std::vector<double> convolve_1d(std::vector<double> &data_in, int thread_count) 
         }
 //        cout << "}" << endl;
         // normalizing data
+#ifdef DEBUG_FLAG
+        Logging* log = Logging::getInstance();
+        stringstream ss;
+        ss << "  binomNormalization_const=" << binomNormalization_const;
+        cout << ss.str() << endl;
+//        log->addText(binomNormalization_const);
+        vector<double> v{sum, binomNormalization_const};
+        log->addText(v);
+#endif
         data_out[j] = sum / binomNormalization_const;
         if(j % step == 0) {
             cout << "\33[2K"; // erase the current line
@@ -1020,7 +1029,9 @@ std::vector<double> convolve_1d_fast(
         stringstream ss;
         ss << "threshold=" << threshold << "  binomNormalization_const=" << binomNormalization_const;
         cout << ss.str() << endl;
-        log->addText(ss.str());
+//        log->addText(binomNormalization_const);
+        vector<double> v{sum, binomNormalization_const};
+        log->addText(v);
 #endif
         data_out[j] = sum / binomNormalization_const;
         if(j % step == 0) {

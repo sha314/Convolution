@@ -539,13 +539,13 @@ int cmd_args_v3(int argc, char** argv){
     double threshold{};
     int times{1};
 
-//    parse_cmd_arg(argc, argv, in_filename, out_filename, a_usecols, b_usecols, info,
-//                        write_header_and_comment, skiprows, write_input_data, f_precision, n_threads,
-//                        threshold, times, delimiter);
-
-    parse_cmd_arg_boost(argc, argv, in_filename, out_filename, a_usecols, b_usecols, info,
+    parse_cmd_arg(argc, argv, in_filename, out_filename, a_usecols, b_usecols, info,
                         write_header_and_comment, skiprows, write_input_data, f_precision, n_threads,
                         threshold, times, delimiter);
+
+//    parse_cmd_arg_boost(argc, argv, in_filename, out_filename, a_usecols, b_usecols, info,
+//                        write_header_and_comment, skiprows, write_input_data, f_precision, n_threads,
+//                        threshold, times, delimiter);
 
     if(out_filename.empty()){
         out_filename = in_filename + out_file_flag;
@@ -624,6 +624,10 @@ int cmd_args_v3(int argc, char** argv){
 int parse_cmd_arg_boost(int argc, char *const *argv, string &in_filename, string &out_filename, vector<int> &a_usecols,
                          vector<int> &b_usecols, string &info, bool &write_header_and_comment, int &skiprows,
                          bool &write_input_data, int &f_precision, int &n_threads, double &threshold, int &times, char& delimiter) {
+
+    write_input_data=false;
+    write_header_and_comment = true;
+
     try
     {
         /** Define and parse the program options
@@ -634,8 +638,7 @@ int parse_cmd_arg_boost(int argc, char *const *argv, string &in_filename, string
                 ("help,h", "Print help messages")
                 ("without,a", boost::program_options::value<vector<int>>(&a_usecols)->multitoken()->composing(), "columns that we want in the output file without performing convolution.\nNo default value.")
                 ("with,b", boost::program_options::value<vector<int>>(&b_usecols)->required()->multitoken()->composing(), "columns that we want in the output file with performing convolution.")
-                ("copy,c", boost::program_options::value<bool>(&write_header_and_comment)->default_value(true),
-                 "If provided the header and comment from the input file will be written "
+                ("copy,c", "If provided the header and comment from the input file will be written "
                          "without modification to the output file. Header is the first line of the input file.")
                 ("delimiter,d", boost::program_options::value<char>(&delimiter)->default_value(' '), "Delimiter to use. Default value is ' '.")
                 ("in", boost::program_options::value<string>(&in_filename)->required(), "name of the input file that we want to convolve")
@@ -647,7 +650,7 @@ int parse_cmd_arg_boost(int argc, char *const *argv, string &in_filename, string
                 ("threads,t", boost::program_options::value<int>(&n_threads)->default_value(1), "Info to write as comment in the output file")
                 ("version,v", boost::program_options::value<int>()->notifier(&version_notified), "Info to write as comment in the output file")
                 ("skip", boost::program_options::value<int>(&skiprows)->default_value(0), "Number of rows to skip from the input file. Default value is 0.")
-                ("write,w", boost::program_options::value<bool>(&write_input_data)->default_value(false), "If provided input b data will be written to the output file.")
+                ("write,w", "If provided input b data will be written to the output file.")
                 ("threshold", boost::program_options::value<double>(&threshold)->default_value(1e-15), "If weight factor that multiplies input data at each iteration is less than\n"
                         " `threshold` then break that loop. Program performs way faster in this way.")
                 ("times", boost::program_options::value<int>(&times)->default_value(1), "Number of times to perform convolution.");
@@ -664,6 +667,16 @@ int parse_cmd_arg_boost(int argc, char *const *argv, string &in_filename, string
                 cout << "Convolution app" << endl
                           << desc << endl;
                 cout << "A line that begins with '#' is considered a commented line." << endl;
+                return SUCCESS;
+            }
+            if (vm.count("write") || vm.count("w")) {
+                write_input_data = true;
+                cout << "input data will be written" << endl;
+//                return SUCCESS;
+            }
+            if (vm.count("copy")|| vm.count("c")) {
+                write_header_and_comment = false;
+                cout << "header information will not be written" << endl;
 //                return SUCCESS;
             }
 
@@ -706,6 +719,7 @@ void parse_cmd_arg(int argc, char *const *argv, string &in_filename, string &out
         switch (flg){
 
             case str2int("-a"):
+            case str2int("--without"):
                 cout << "parse : line " << __LINE__ << endl;
                 ++i;
                 if(i < argc) {
@@ -728,6 +742,7 @@ void parse_cmd_arg(int argc, char *const *argv, string &in_filename, string &out
                 ++i;
                 break;
             case str2int("-b"):
+            case str2int("--with"):
                 cout << "parse : line " << __LINE__ << endl;
                 ++i;
                 if(i < argc) {
@@ -752,10 +767,12 @@ void parse_cmd_arg(int argc, char *const *argv, string &in_filename, string &out
                 ++i;
                 break;
             case str2int("-c"):
+            case str2int("--copy"):
                 write_header_and_comment = true;
                 ++i;
                 break;
             case str2int("-d"):
+            case str2int("--delimiter"):
                 ++i;
                 if(i < argc) {
                     delimiter = argv[i][0];
@@ -768,7 +785,7 @@ void parse_cmd_arg(int argc, char *const *argv, string &in_filename, string &out
                 }
                 ++i;
                 break;
-            case str2int("-f"):
+            case str2int("--in"):
                 cout << "parse : line " << __LINE__ << endl;
                 ++i;
                 if(i < argc) {
@@ -778,6 +795,7 @@ void parse_cmd_arg(int argc, char *const *argv, string &in_filename, string &out
                 ++i;
                 break;
             case str2int("-i"):
+            case str2int("--info"):
                 ++i;
                 if(i < argc) {
                     info = argv[i];
@@ -786,6 +804,7 @@ void parse_cmd_arg(int argc, char *const *argv, string &in_filename, string &out
                 break;
 
             case str2int("-o"):
+            case str2int("--out"):
                 ++i;
                 if(i < argc) {
                     out_filename = argv[i];
@@ -800,13 +819,14 @@ void parse_cmd_arg(int argc, char *const *argv, string &in_filename, string &out
                 }
                 ++i;
                 break;
-            case str2int("-s"):
+            case str2int("--skip"):
                 ++i;
                 if(i < argc) {
                     skiprows = stoi(argv[i]);
                 }
                 ++i;
                 break;
+            case str2int("-t"):
             case str2int("--threads"):
                 ++i;
                 if(i < argc) {
@@ -825,7 +845,13 @@ void parse_cmd_arg(int argc, char *const *argv, string &in_filename, string &out
                 exit(0);
 
             case str2int("-w"):
+            case str2int("--write"):
                 write_input_data = true;
+                break;
+            case str2int("--times"):
+                ++i;
+                times = stoi(argv[i]);
+                ++i;
                 break;
             default:
                 help();

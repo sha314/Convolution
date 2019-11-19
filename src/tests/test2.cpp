@@ -181,19 +181,29 @@ void test3_convolution(){
     string filename="data_json.txt";
     vector<double> a(10000, 1);
 
+
     Logging* log = Logging::getInstance();
 
-    log->setFilename("e-9.txt");
-    auto b_data_out = convolve_1d_fast(a, 1, 1e-9);
+    log->setFilename("const-e-2.txt");
+    log->addText("#threshold=1e-2");
+    log->addText("#<sum><normalization constant>");
+    auto b_data_out = convolve_1d_fast(a, 1, 1e-2);
 
-    log->setFilename("e-15.txt");
+    log->setFilename("const-e-15.txt");
+    log->addText("#threshold=1e-15");
+    log->addText("#<sum><normalization constant>");
     convolve_1d_fast(a, 1, 1e-15);
-
-    log->setFilename("e-18.txt");
-    convolve_1d_fast(a, 1, 1e-18);
-
-    log->setFilename("0.txt");
+//
+//
+    log->setFilename("const-0.txt");
+    log->addText("#threshold=0");
+    log->addText("#<sum><normalization constant>");
     convolve_1d_fast(a, 1, 0);
+//
+    log->setFilename("const-none.txt");
+    log->addText("#threshold=none");
+    log->addText("#<sum><normalization constant>");
+    convolve_1d(a, 1);
 
 //    auto b_data_out = convolve_1d(a, 1);
 //    ofstream fout(filename+"_convoluted.txt");
@@ -205,13 +215,18 @@ void test3_convolution(){
 
 void test4_convolution(){
     string filename="sq_lattice_site_percolation_periodic__400_2018.6.30_7.51.51.txt";
-    filename ="sq_lattice_site_percolation_periodic_free-energy_L400_2019-11-13_205909.txt_convoluted.txt_derivative.txt";
-    filename="sq_lattice_site_percolation_periodic_free-energy_L400_2019-11-13_205909.txt_convoluted.txt_derivative.txt_convoluted.txt";
+//    filename ="sq_lattice_site_percolation_periodic_free-energy_L400_2019-11-13_205909.txt_convoluted.txt_derivative.txt";
+//    filename="sq_lattice_site_percolation_periodic_free-energy_L400_2019-11-13_205909.txt_convoluted.txt_derivative.txt_convoluted.txt";
     auto delimeter = analyze_delimeter(filename, 0, ' ');
     auto a = loadtxt_v2(filename,{1}, 0, delimeter);
     cout << a.size() << ", " << a[0].size() << endl;
     cout << "line " << __LINE__ << endl;
 //    exit(0);
+    Logging* log = Logging::getInstance();
+
+    log->setFilename("const-e-15.txt");
+    log->addText("#threshold=1e-15");
+    log->addText("#<sum><normalization constant>");
     auto b_data_out = convolve_2d_fast_diff(a, 1, 1, 1e-15);
 //    auto b_data_out = convolve_1d(a, 1);
     cout << b_data_out.size() << ", " << b_data_out[0].size() << endl;
