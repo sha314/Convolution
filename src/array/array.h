@@ -6,6 +6,7 @@
 #define CONVOLUTION_ARRAY_H
 
 #include <vector>
+#include <cstddef>
 
 namespace num_array {
     template<typename T>
