@@ -7,8 +7,10 @@
 #include <thread>
 #include <mutex>
 #include <omp.h>
+#include <sstream>
 #include "convolution.h"
 #include "binomial.h"
+#include "../io/logger.h"
 
 using namespace std;
 
@@ -983,7 +985,7 @@ std::vector<double> convolve_1d_fast(
                 // and reaches `threshold` very fast. Therefore
                 // contribution of the next values will be negligible compared to the previous values
 #ifdef DEBUG_FLAG
-//                cout << "i=" << i << " binom =" << binom << endl;
+                cout << "i=" << i << " binom =" << binom << endl;
 //                exit(0);
 #endif
                 break;
@@ -1005,7 +1007,7 @@ std::vector<double> convolve_1d_fast(
                 // and reaches `threshold` very fast. Therefore
                 // contribution of the next values will be negligible compared to the previous values
 #ifdef DEBUG_FLAG
-//                cout << "i=" << i << " binom =" << binom << endl;
+                cout << "i=" << i << " binom =" << binom << endl;
 //                exit(0);
 #endif
                 break;
@@ -1013,6 +1015,13 @@ std::vector<double> convolve_1d_fast(
         }
 
         // normalizing data
+#ifdef DEBUG_FLAG
+        Logging* log = Logging::getInstance();
+        stringstream ss;
+        ss << "threshold=" << threshold << "  binomNormalization_const=" << binomNormalization_const;
+        cout << ss.str() << endl;
+        log->addText(ss.str());
+#endif
         data_out[j] = sum / binomNormalization_const;
         if(j % step == 0) {
             cout << "\33[2K"; // erase the current line

@@ -27,6 +27,6 @@ set(SOURCE_FILES
         src/utype.cpp
         src/include/utype.h
         src/tests/test2.cpp
-        src/tests/test2.h src/cmd_args.cpp src/cmd_args.h)
+        src/tests/test2.h src/cmd_args.cpp src/cmd_args.h src/io/logger.cpp src/io/logger.h)
 
 add_executable(convolution ${SOURCE_FILES})

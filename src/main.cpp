@@ -17,6 +17,7 @@
 #include "tests/test1.h"
 #include "tests/test2.h"
 #include "cmd_args.h"
+#include "io/logger.h"
 
 
 using namespace std;
@@ -114,6 +115,7 @@ void on_age(int age)
 }
 
 
+Logging* Logging::_instance=nullptr;
 
 /***
  *
@@ -127,7 +129,7 @@ int main(int argc, char* argv[]) {
     auto t0 = std::chrono::system_clock::now();
 
 //    cmd_args(argc, argv);
-    cmd_args_v2(argc, argv);
+//    cmd_args_v2(argc, argv);
 //    cmd_args_v3(argc, argv);
 //    test1_convolution();
 //    test2_convolution();
