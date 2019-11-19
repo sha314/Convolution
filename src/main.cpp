@@ -127,11 +127,11 @@ int main(int argc, char* argv[]) {
     auto t0 = std::chrono::system_clock::now();
 
 //    cmd_args(argc, argv);
-//    cmd_args_v2(argc, argv);
-    cmd_args_v3(argc, argv);
+    cmd_args_v2(argc, argv);
+//    cmd_args_v3(argc, argv);
 //    test1_convolution();
 //    test2_convolution();
-//      test3_convolution();
+      test3_convolution();
 //    test4_convolution();
 
     auto t1 = std::chrono::system_clock::now();

@@ -19,12 +19,12 @@ std::vector<std::vector<double>> convolve_2d(std::vector<std::vector<double>> &d
 std::vector<double> convolve_1d_fast(
         std::vector<double>& data_in,
         int thread_count=1,
-        double threshold=1e-9);
+        double threshold=1e-15);
 
 std::vector<std::vector<double>> convolve_2d_fast(
         std::vector<std::vector<double>> &data_in,
         int thread_count=1,
-        double threshold=1e-9);
+        double threshold=1e-15);
 
 /***
  * Perform derivative along with convolution

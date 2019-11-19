@@ -402,7 +402,7 @@ int cmd_args_v2(int argc, char** argv){
                 ("version,v",po::value<int>()->notifier(&version_notified), "Info to write as comment in the output file")
                 ("skip",po::value<int>(&skiprows)->default_value(0), "Number of rows to skip from the input file. Default value is 0.")
                 ("write,w",po::value<bool>(&write_input_data)->default_value(false),"If provided input b data will be written to the output file.")
-                ("threshold",po::value<double>(&threshold)->default_value(1e-9),"If weight factor that multiplies input data at each iteration is less than\n"
+                ("threshold",po::value<double>(&threshold)->default_value(1e-15),"If weight factor that multiplies input data at each iteration is less than\n"
                         " `threshold` then break that loop. Program performs way faster in this way.")
                 ("times",po::value<int>(&times)->default_value(1),"Number of times to perform convolution.");
 
@@ -648,7 +648,7 @@ int parse_cmd_arg_boost(int argc, char *const *argv, string &in_filename, string
                 ("version,v", boost::program_options::value<int>()->notifier(&version_notified), "Info to write as comment in the output file")
                 ("skip", boost::program_options::value<int>(&skiprows)->default_value(0), "Number of rows to skip from the input file. Default value is 0.")
                 ("write,w", boost::program_options::value<bool>(&write_input_data)->default_value(false), "If provided input b data will be written to the output file.")
-                ("threshold", boost::program_options::value<double>(&threshold)->default_value(1e-9), "If weight factor that multiplies input data at each iteration is less than\n"
+                ("threshold", boost::program_options::value<double>(&threshold)->default_value(1e-15), "If weight factor that multiplies input data at each iteration is less than\n"
                         " `threshold` then break that loop. Program performs way faster in this way.")
                 ("times", boost::program_options::value<int>(&times)->default_value(1), "Number of times to perform convolution.");
 
