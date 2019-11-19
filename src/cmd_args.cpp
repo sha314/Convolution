@@ -519,6 +519,49 @@ int cmd_args_v2(int argc, char** argv){
     return 0;
 }
 
+void help_v3(){
+    string hlp = R"***(Usage:
+convolution [--in <STRING>] [-a <INT>,<INT>,...] [-b <INT>,<INT>,...] [-h] [-t <INT>] [-i <STRING>]
+
+perform convolution based on provided options.
+
+Options                      Description
+  -a, --without              columns that we want in the output file without performing convolution.
+                             No default value.
+  -b, --with                 columns that we want in the output file with performing convolution.
+                             No default value.
+  -c, --copy                 If provided the header and comment from the input file will be written
+                             without modification to the output file. Header is the first line of the
+                             input file.
+  -d, --delimiter            Delimiter to use. Default value is ' '.
+      --in                   name of the input file that we want to convolute. No default value.
+  -i  --info                 Info to write as comment in the output file
+      --out                  name of the output file. If not provided the string '_convoluted.txt' will be
+                             appended to the input file.
+  -p, --precision            Floating point precision when writing in the data file. Default value is 10
+  -s, --skip                 Number of rows to skip from the input file. Default value is 0.
+  -t, --threads              Explicitly specify number of thread to use. Default is the max number of thread
+                             allowed by the system.
+      --threshold            If weight factor that multiplies input data at each iteration is less than
+                            `threshold` then break that loop. Program performs way faster in this way.
+      --times                Number of times to perform convolution.
+  -h, --help                 display this help and exit
+  -v, --version              output version information and exit
+  -w, --write                If provided input b data will be written to the output file.
+
+
+The INT argument is an integer.
+The STRING argument is a string of characters.
+
+A line that begins with '#' is considered a commented line.
+
+Exit status:
+ 0  if OK,
+ 1  if minor problems (e.g., cannot access subdirectory),
+ 2  if serious trouble (e.g., cannot access command-line argument).
+)***";
+    cout << hlp << endl;
+}
 
 int cmd_args_v3(int argc, char** argv){
     string in_filename;
@@ -708,7 +751,7 @@ void parse_cmd_arg(int argc, char *const *argv, string &in_filename, string &out
                          vector<int> &b_usecols, string &info, bool &write_header_and_comment, int &skiprows,
                          bool &write_input_data, int &f_precision, int &n_threads, double &threshold, int &times, char& delimiter) {
     if(argc == 1){
-        help();
+        help_v3();
         exit(0);
     }
     int flg;
@@ -836,7 +879,7 @@ void parse_cmd_arg(int argc, char *const *argv, string &in_filename, string &out
                 break;
             case str2int("-h"):
             case str2int("--help"):
-                help();
+                help_v3();
                 exit(0);
 
             case str2int("-v"):
@@ -854,7 +897,7 @@ void parse_cmd_arg(int argc, char *const *argv, string &in_filename, string &out
                 ++i;
                 break;
             default:
-                help();
+                help_v3();
                 exit(0);
         }
 
