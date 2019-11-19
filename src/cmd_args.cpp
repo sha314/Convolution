@@ -566,7 +566,7 @@ Exit status:
 int cmd_args_v3(int argc, char** argv){
     string in_filename;
     string out_filename;
-    string out_file_flag = "_convoluted.txt";
+    string out_file_flag = "_convoluted";
     int header_line{0};
     size_t test_size{0};
     vector<int> a_usecols, b_usecols; // b_usecols will be convolved and a_usecols will remain unchanged
@@ -586,12 +586,13 @@ int cmd_args_v3(int argc, char** argv){
                         write_header_and_comment, skiprows, write_input_data, f_precision, n_threads,
                         threshold, times, delimiter);
 
-//    parse_cmd_arg_boost(argc, argv, in_filename, out_filename, a_usecols, b_usecols, info,
+    parse_cmd_arg_boost(argc, argv, in_filename, out_filename, a_usecols, b_usecols, info,
 //                        write_header_and_comment, skiprows, write_input_data, f_precision, n_threads,
 //                        threshold, times, delimiter);
 
     if(out_filename.empty()){
-        out_filename = in_filename + out_file_flag;
+//        out_filename = in_filename + out_file_flag + ".txt";
+        out_filename = in_filename + out_file_flag + "_" + to_string(times) + "times.txt";
     }
     /*******
      * checking provided arguments
@@ -637,18 +638,23 @@ int cmd_args_v3(int argc, char** argv){
         a_data = loadtxt_v2(in_filename, a_usecols, skiprows, delimiter);
     }
 //    view_matrix(b_data_in);
+
     // performing convolution once
 //    vector<vector<double>> b_data_out = convolve_2d(b_data_in, n_threads);
-    vector<vector<double>> b_data_out = convolve_2d_fast(b_data_in, n_threads, threshold);
+//    vector<vector<double>> b_data_out = convolve_2d_fast(b_data_in, n_threads, threshold);
 
 
     // for multiple convolution
-//    auto tmp = b_data_in;
-//    vector<vector<double>> b_data_out;
-//    for(int i{}; i < times; ++i){
-//        b_data_out = convolve_2d_fast(tmp, n_threads, threshold);
-//        tmp = b_data_out;
-//    }
+    auto tmp = b_data_in;
+    vector<vector<double>> b_data_out;
+    for(int i{}; i < times; ++i){
+        if(threshold == -1) {
+            b_data_out = convolve_2d(b_data_in, n_threads);
+        }else {
+            b_data_out = convolve_2d_fast(tmp, n_threads, threshold);
+        }
+        tmp = b_data_out;
+    }
 
     // writing output to file
     savetxt_multi(in_filename,
