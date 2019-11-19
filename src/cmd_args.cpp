@@ -530,9 +530,6 @@ Options                      Description
                              No default value.
   -b, --with                 columns that we want in the output file with performing convolution.
                              No default value.
-  -c, --copy                 If provided the header and comment from the input file will be written
-                             without modification to the output file. Header is the first line of the
-                             input file.
   -d, --delimiter            Delimiter to use. Default value is ' '.
       --in                   name of the input file that we want to convolute. No default value.
   -i  --info                 Info to write as comment in the output file
@@ -572,7 +569,7 @@ int cmd_args_v3(int argc, char** argv){
     vector<int> a_usecols, b_usecols; // b_usecols will be convolved and a_usecols will remain unchanged
     vector<string> a_names, b_names;
     string info;
-    bool write_header_and_comment{false};
+    bool write_header_and_comment{true}; // true by default
     int skiprows{0};
     char delimiter=' ';
     bool write_input_data {false};
@@ -586,7 +583,7 @@ int cmd_args_v3(int argc, char** argv){
                         write_header_and_comment, skiprows, write_input_data, f_precision, n_threads,
                         threshold, times, delimiter);
 
-    parse_cmd_arg_boost(argc, argv, in_filename, out_filename, a_usecols, b_usecols, info,
+//    parse_cmd_arg_boost(argc, argv, in_filename, out_filename, a_usecols, b_usecols, info,
 //                        write_header_and_comment, skiprows, write_input_data, f_precision, n_threads,
 //                        threshold, times, delimiter);
 
@@ -675,7 +672,7 @@ int parse_cmd_arg_boost(int argc, char *const *argv, string &in_filename, string
                          bool &write_input_data, int &f_precision, int &n_threads, double &threshold, int &times, char& delimiter) {
 
     write_input_data=false;
-    write_header_and_comment = true;
+//    write_header_and_comment = true;
 
     try
     {
@@ -687,8 +684,8 @@ int parse_cmd_arg_boost(int argc, char *const *argv, string &in_filename, string
                 ("help,h", "Print help messages")
                 ("without,a", boost::program_options::value<vector<int>>(&a_usecols)->multitoken()->composing(), "columns that we want in the output file without performing convolution.\nNo default value.")
                 ("with,b", boost::program_options::value<vector<int>>(&b_usecols)->required()->multitoken()->composing(), "columns that we want in the output file with performing convolution.")
-                ("copy,c", "If provided the header and comment from the input file will be written "
-                         "without modification to the output file. Header is the first line of the input file.")
+//                ("copy,c", "If provided the header and comment from the input file will be written "
+//                         "without modification to the output file. Header is the first line of the input file.")
                 ("delimiter,d", boost::program_options::value<char>(&delimiter)->default_value(' '), "Delimiter to use. Default value is ' '.")
                 ("in", boost::program_options::value<string>(&in_filename)->required(), "name of the input file that we want to convolve")
                 ("out", boost::program_options::value<string>(&out_filename), "name of the output file. "
@@ -721,13 +718,11 @@ int parse_cmd_arg_boost(int argc, char *const *argv, string &in_filename, string
             if (vm.count("write") || vm.count("w")) {
                 write_input_data = true;
                 cout << "input data will be written" << endl;
-//                return SUCCESS;
             }
-            if (vm.count("copy")|| vm.count("c")) {
-                write_header_and_comment = false;
-                cout << "header information will not be written" << endl;
-//                return SUCCESS;
-            }
+//            if (vm.count("copy")|| vm.count("c")) {
+//                write_header_and_comment = false;
+//                cout << "header information will not be written" << endl;
+//            }
 
             cout << __LINE__ << endl;
 
@@ -813,11 +808,6 @@ void parse_cmd_arg(int argc, char *const *argv, string &in_filename, string &out
 
                     }
                 }
-                ++i;
-                break;
-            case str2int("-c"):
-            case str2int("--copy"):
-                write_header_and_comment = true;
                 ++i;
                 break;
             case str2int("-d"):
