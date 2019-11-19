@@ -978,7 +978,7 @@ std::vector<double> convolve_1d_fast(
             binomNormalization_const += binom;
             sum      += data_in[i] * binom;
             prev      = binom;
-            if(binom < threshold){
+            if(binom <= threshold){
                 // whatever the initial valu of binom is it always decreases as loop iterates
                 // and reaches `threshold` very fast. Therefore
                 // contribution of the next values will be negligible compared to the previous values
@@ -1085,7 +1085,7 @@ std::vector<std::vector<double>> convolve_2d_fast(
                 sum[j] += data_in[i][j] * binom;
             }
             prev      = binom;
-            if(binom < threshold){
+            if(binom <= threshold){
                 // whatever the initial valu of binom is it always decreases as loop iterates
                 // and reaches `threshold` very fast. Therefore
                 // contribution of the next values will be negligible compared to the previous values
