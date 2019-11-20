@@ -611,7 +611,7 @@ int cmd_args_v3(int argc, char** argv){
     if(out_filename.empty()){
 //        out_filename = in_filename + out_file_flag;
         out_filename = in_filename + out_file_flag + "_" + to_string(times) + "times";
-        if(threshold < 0){
+        if(threshold >= 0){
             out_filename += "_fast";
         }
     }
