@@ -241,7 +241,7 @@ vector<vector<double>> loadtxt(string filename, const vector<int>& usecols,
  */
 vector<vector<double>> loadtxt_v2(string filename, const vector<int>& usecols,
                                int skiprows, char delimiter, char comment){
-//    cout << "On test " << delimiter << endl;
+//    cout << "On test_process " << delimiter << endl;
     vector<vector<double>> data;
     ifstream fin(filename);
 

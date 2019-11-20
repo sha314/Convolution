@@ -18,6 +18,7 @@
 #include "tests/test2.h"
 #include "cmd_args.h"
 #include "io/logger.h"
+#include "args/process.h"
 
 
 using namespace std;
@@ -130,11 +131,12 @@ int main(int argc, char* argv[]) {
 
 //    cmd_args(argc, argv);
 //    cmd_args_v2(argc, argv);
-    cmd_args_v3(argc, argv);
+//    cmd_args_v3(argc, argv);
 //    test1_convolution();
 //    test2_convolution();
 //      test3_convolution();
 //    test4_convolution();
+    test_process(argc, argv);
 
     auto t1 = std::chrono::system_clock::now();
 

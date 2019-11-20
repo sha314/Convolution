@@ -17,7 +17,7 @@ Options                      Description
   -o                         name of the output file. If not provided the string '_convoluted.txt' will be
                              appended to the input file.
   -s                         Number of rows to skip from the input file. Default value is 0.
-  -t                         to test the performance of the convolution program. No default value.
+  -t                         to test_process the performance of the convolution program. No default value.
   -h, --help                 display this help and exit
   -v, --version              output version information and exit
   -w                         If provided input b data will be written to the output file.

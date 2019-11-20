@@ -105,7 +105,7 @@ Options                      Description
                              appended to the input file.
   -p, --precision            Floating point precision when writing in the data file. Default value is 10
   -s                         Number of rows to skip from the input file. Default value is 0.
-  -t                         to test the performance of the convolution program. No default value.
+  -t                         to test_process the performance of the convolution program. No default value.
       --threads              Explicitly specify number of thread to use. Default is the max number of thread
                              allowed by the system.
   -h, --help                 display this help and exit
