@@ -11,6 +11,13 @@ set(CMAKE_CXX_STANDARD 11)
 SET(CMAKE_CXX_FLAGS  "-O3 -pthread -fopenmp") # for boost library + Open MP + pthread
 #SET(CMAKE_CXX_FLAGS  "-O3 -pthread -fopenmp -lboost_program_options -DUSE_BOOST") # for boost library + Open MP + pthread + boost
 
+
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  message ("MAC OS detected")
+  set(CMAKE_C_COMPILER /opt/homebrew/opt/llvm/bin/clang)
+  set(CMAKE_CXX_COMPILER /opt/homebrew/opt/llvm/bin/clang++)
+endif()
+
 set(SOURCE_FILES
         src/main.cpp
         src/convolution/binomial.cpp
